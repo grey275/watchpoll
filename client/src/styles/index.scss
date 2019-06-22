@@ -1,3 +1,5 @@
+
+
 body {
   margin: 0;
   padding: 0;
@@ -12,3 +14,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+nav {
+  // height: 5%;
+}
+
+#root {
+  width:100%;
+  height:100%;
+}
+
+#app {
+  width:100%;
+  height:100%;
+}
+
+
+@import './_room';
+@import 'nav';
