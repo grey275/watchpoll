@@ -67,8 +67,6 @@ An interactive site to allow multiple users to view videos together and to vote 
   - the timer resets
   - the next
 
-### stretch
-
 - a user clicks the change name button
 
   - a form which allows him to edit his name pops up
@@ -77,6 +75,8 @@ An interactive site to allow multiple users to view videos together and to vote 
 - Create Button - will be used to create a new room
 
 - Create a pop up page that allow user to select a theme and seed the video list themselves.
+
+- fork room
 
 ## Wireframes
 
