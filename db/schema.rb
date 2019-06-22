@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_22_173923) do
+ActiveRecord::Schema.define(version: 2019_06_22_174627) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,16 @@ ActiveRecord::Schema.define(version: 2019_06_22_173923) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["video_poll_id"], name: "index_candidate_videos_on_video_poll_id"
+  end
+
+  create_table "chat_events", force: :cascade do |t|
+    t.bigint "room_id"
+    t.string "type"
+    t.string "data"
+    t.datetime "timestamp"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["room_id"], name: "index_chat_events_on_room_id"
   end
 
   create_table "rooms", force: :cascade do |t|
@@ -66,6 +76,7 @@ ActiveRecord::Schema.define(version: 2019_06_22_173923) do
   end
 
   add_foreign_key "candidate_videos", "video_polls"
+  add_foreign_key "chat_events", "rooms"
   add_foreign_key "user_sessions", "rooms"
   add_foreign_key "user_sessions", "users"
   add_foreign_key "video_polls", "rooms"
