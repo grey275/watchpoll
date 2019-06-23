@@ -8,7 +8,7 @@ What if youtube's autoplay feature was democratized?
 
 Instead of some etherial youtube algorithm deciding the next video, it should be people you can talk to and interact with.
 
-An interactive site to allow multiple users to view videos together and to vote what videos they want to see next. The video that has the most votes is then played
+An interactive site to allow multiple users to view videos together and to vote what videos they want to see next.
 
 ## User Stories(as a user)
 
@@ -80,11 +80,87 @@ An interactive site to allow multiple users to view videos together and to vote 
 
 ## Wireframes
 
+# API spec
+
+```js
+  room_index = [id, name, descripiton]
+  user = {id, username},
+  playing_video = {startTime, duration, uri, skip_votes},
+  poll_video = {uri, votes:[ userid, ... ]},
+  vote = {user_id, candidate_video_id}
+  user_message = {username, content},
+  notification = {username, type: 'join' || 'leave'},
+
+  chatEvent = {
+    type: 'user_message' || 'notification',
+    data: user_message || notification,
+  }
+
+  // compound
+  users_state = [user, ...]
+  poll_state = [poll_video, ...](...later)
+  chat_state = [ChatEvent, ...]
+
+  // returned by GET /rooms/[room_id]
+  room_state = [users_state, poll_state, chat_state]
+```
+
+```
+channels, all identified by room_id
+  server to clients
+  'user_state_[:room_id]':
+    - client gets users_state
+
+  "poll_state_#[:room_id]':
+    - client gets poll_state
+    - server gets vote
+
+  chatroom_state_#[:room_id]
+    - client gets chat
+    - server gets user_message
+
+// in body from GET /api/room/[id]
+// initial room setup.. get entire current state of the room
+room = {
+  id,
+  video,
+  users,
+  poll
+  chatEvents,
+}
+
+room_description = {
+  room_id, string
+  room_title, string
+  current_video_id, string
+  description_text, string
+  seed_playlist_id, string
+}
+```
+
 ## Routes
 
-/ - homepage
+### React-router
 
-- ## /api
-- ## /socket
+/about -> pop up showing project info
 
-## ERD
+### front-end server
+
+- / -> home page #
+- /rooms/[id] -> /api/room/[id]
+
+### back-end server
+
+- /api
+  - /rooms -> [room_description, ...]
+  - /rooms/[room_id]
+    /cable
+    channels: (signature from above) - vote - chat_event_broadcast - user - video
+
+### open questions(for nima)
+
+- should we proxy the back end through the front end? including sockets
+- discuss ERD
+- routes
+- review wireframe
+- semantic-ui
