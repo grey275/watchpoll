@@ -3,7 +3,7 @@ class CreateRooms < ActiveRecord::Migration[5.2]
     create_table :rooms do |t|
       t.string :name
       t.string :seed_playlist_id
-      t.time :runtime
+      t.integer :runtime
 
       t.timestamps
     end

@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 2019_06_22_174627) do
   enable_extension "plpgsql"
 
   create_table "candidate_videos", force: :cascade do |t|
+    t.string "video_uid"
     t.bigint "video_poll_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -35,7 +36,7 @@ ActiveRecord::Schema.define(version: 2019_06_22_174627) do
   create_table "rooms", force: :cascade do |t|
     t.string "name"
     t.string "seed_playlist_id"
-    t.time "runtime"
+    t.integer "runtime"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
