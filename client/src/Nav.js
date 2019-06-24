@@ -9,7 +9,7 @@ class Nav extends React.Component {
 
   render() {
     return (
-      <Menu as="nav" fixed>
+      <Menu as="nav">
         <Menu.Item
           as={Header}
         >

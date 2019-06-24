@@ -1,6 +1,7 @@
 import React from 'react';
 import { Placeholder } from 'semantic-ui-react';
 import YouTube from 'react-youtube';
+import reframe from 'reframe.js';
 
 class VideoPlayer extends React.Component {
   constructor() {
@@ -9,22 +10,24 @@ class VideoPlayer extends React.Component {
   }
 
   render() {
-    const opts = {
-      height: '648',
-      width: '1152',
-    };
     return (
-      <section id="video-player">
-        <YouTube
-          opts={opts}
-          videoId="dQw4w9WgXcQ"
-        />
+      <section id="video-container">
+        <iframe
+          id="video-player"
+          width="560" height="315"
+          src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+          frameBorder="0"
+          allowFullScreen
+          title="youtube-video"
+        >
+        </iframe>
       </section>
     );
   }
 
   componentDidMount() {
-    this.setState({ someKey: 'otherValue' });
+    console.log('reframing')
+    reframe('iframe');
   }
 }
 

@@ -1,12 +1,22 @@
 import React from 'react';
 import _ from 'lodash';
 
-const Comment = (index) => (
-  <div key={index}>
-    <label>username:</label>
-    I'm a comment that's a bit longer, lets see how this'll work out
-  </div>
-)
+import { Feed, Icon, Comment } from 'semantic-ui-react';
+
+const CommentEvent = () => {
+  const c = <Comment>
+    {/* <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' /> */}
+      <Comment.Content>
+        <Comment.Author as='a'>Matt</Comment.Author>
+        <Comment.Metadata>
+          <div>Today at 5:42PM</div>
+        </Comment.Metadata>
+        <Comment.Text>loreMagna et culpa magna deserunt ea fugiat nisi sunt magna culpa.m
+        </Comment.Text>
+    </Comment.Content>
+  </Comment>
+  return c
+};
 
 class Chat extends React.Component {
   constructor() {
@@ -15,11 +25,11 @@ class Chat extends React.Component {
   }
 
   render() {
-    const comments = _.range(10).map(Comment)
+    const comments = _.range(10).map(() => <CommentEvent />)
     return (
-      <section id="chat">
+      <Comment.Group id="chat">
         {comments}
-      </section>
+      </Comment.Group>
     )
   }
 

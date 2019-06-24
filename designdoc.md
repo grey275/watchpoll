@@ -98,14 +98,14 @@ An interactive site to allow multiple users to view videos together and to vote 
 
   // compound
   users_state = [user, ...]
-  poll_state = [poll_video, ...](...later)
+  poll_state = [poll_video, ...]
   chat_state = [ChatEvent, ...]
 
   // returned by GET /rooms/[room_id]
   room_state = [users_state, poll_state, chat_state]
 ```
 
-```
+```js
 channels, all identified by room_id
   server to clients
   'user_state_[:room_id]':
