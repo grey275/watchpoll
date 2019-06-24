@@ -1,0 +1,23 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./rails-back-end/tmp/db:/var/lib/postgresql/data
+  rails-back-end:
+    build: ./rails-back-end
+    command: bin/rails server --port 3001 -b 0.0.0.0
+    volumes:
+      - /home/pete/lighthouse/watchpoll/rails-back-end:/app
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+  react-front-end:
+    build: ./react-front-end
+    volumes:
+      - /home/pete/lighthouse/watchpoll/react-front-end:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - rails-back-end
