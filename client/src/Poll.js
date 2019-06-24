@@ -23,15 +23,23 @@ const Candidate = () => {
 
 const NewCandidate = () => (
   <article className="video-candidate">
-      <Image className="thumbnail" size='small' src='https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg?sqp=-oaymwEZCPYBEIoBSFXyq4qpAwsIARUAAIhCGAFwAQ==&amp;rs=AOn4CLD0LAGwiQ3ms-wTXdtIeZvnXLoQmg' />
+    <Image
+      className="thumbnail"
+      size="small"
+      src="https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg?sqp=-oaymwEZCPYBEIoBSFXyq4qpAwsIARUAAIhCGAFwAQ==&amp;rs=AOn4CLD0LAGwiQ3ms-wTXdtIeZvnXLoQmg"
+    />
+    <h3 className="video-candidate__name">Rick the God</h3>
+    <span className="video-candidate__icon-container">
+      <Icon size="large" name="up arrow" />
+    </span>
   </article>
-)
+);
 class Poll extends React.Component {
 
   render() {
     return (
       <section id="poll">
-        {_.times(5, NewCandidate)}
+        {_.times(2, NewCandidate)}
       </section>
     );
   }

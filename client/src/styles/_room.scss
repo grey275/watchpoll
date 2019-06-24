@@ -2,7 +2,7 @@
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-rows: auto auto;
+  grid-template-rows: min-content max-content;
   grid-template-columns: 65%  auto;
   grid-template-areas:
     "video poll"
@@ -35,8 +35,23 @@
 .video-candidate {
   display:grid;
   grid-template-areas:
-    "thumbnail title ."
-    "thumbnail description icon-container"
+    "thumbnail title title"
+    "thumbnail description icon-container";
+
+  grid-template-columns: max-content auto auto;
+}
+
+.video-candidate__name {
+  grid-area: title;
+  margin: 0;
+  align-self: flex-start
+}
+
+.video-candidate__icon-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  grid-area: icon-container;
 }
 
 .thumbnail {
