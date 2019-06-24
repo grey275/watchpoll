@@ -6,6 +6,8 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+Preference.destroy_all
+PreferenceOrder.destroy_all
 Vote.destroy_all
 CandidateVideo.destroy_all
 VideoPoll.destroy_all
@@ -32,8 +34,8 @@ user2 = User.find_or_create_by! username: 'User2'
 # User.create!(username: 'User4')
 
 # --------------------------
-UserSession.create!(user: user1, room: room1, start: 1.days.ago)
-UserSession.create!(user: user2, room: room2, start: 1.days.ago)
+session1 = UserSession.create!(user: user1, room: room1, start: 1.days.ago)
+session2 = UserSession.create!(user: user2, room: room2, start: 1.days.ago)
 #room1.user_sessions.create!(user_id: 13, start: 1.days.ago)
 #room1.user1.user_sessions.create!(start: 1.days.ago, end: 1.days.ago)
 # UserSession.create!(room_id: 1, user_id: 1, start: 1.days.ago, end: 1.days.ago)
@@ -75,12 +77,12 @@ CandidateVideo.create(
   CandidateVideo.create(
     video_uid: '5anLPw0Efmo',
     video_poll: videopoll1
-  )  
+  )
 
   CandidateVideo.create(
     video_uid: 'Jne9t8sHpUc',
     video_poll: videopoll1
-  )  
+  )
 
   #///
 
@@ -102,20 +104,18 @@ vidselected2 = CandidateVideo.create(
   CandidateVideo.create(
     video_uid: 'ILWSp0m9G2U',
     video_poll: videopoll2
-  )  
+  )
 
   CandidateVideo.create(
     video_uid: 'tn7kaOQvEfM',
     video_poll: videopoll2
-  ) 
-
-  # ----------------
-  Vote.create(
-    user: user1,
-    candidate_video: vidselected1
   )
 
-  Vote.create(
-    user: user1,
-    candidate_video: vidselected2
-  )  
+#PreferenceOrder.destroy_all
+
+preference_order1 = PreferenceOrder.create!(user_session: session1)
+
+#Preference.destroy_all
+
+
+preference1 = Preference.create(preference_order: preference_order1, candidate_video: vidselected1, position: 1)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_22_174627) do
+ActiveRecord::Schema.define(version: 2019_06_24_005900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,23 @@ ActiveRecord::Schema.define(version: 2019_06_22_174627) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["room_id"], name: "index_chat_events_on_room_id"
+  end
+
+  create_table "preference_orders", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_session_id"
+    t.index ["user_session_id"], name: "index_preference_orders_on_user_session_id"
+  end
+
+  create_table "preferences", force: :cascade do |t|
+    t.integer "position"
+    t.bigint "candidate_video_id"
+    t.bigint "preference_order_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["candidate_video_id"], name: "index_preferences_on_candidate_video_id"
+    t.index ["preference_order_id"], name: "index_preferences_on_preference_order_id"
   end
 
   create_table "rooms", force: :cascade do |t|
@@ -70,6 +87,7 @@ ActiveRecord::Schema.define(version: 2019_06_22_174627) do
   create_table "votes", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "candidate_video_id"
+    t.integer "vote_weight"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["candidate_video_id"], name: "index_votes_on_candidate_video_id"
@@ -78,6 +96,9 @@ ActiveRecord::Schema.define(version: 2019_06_22_174627) do
 
   add_foreign_key "candidate_videos", "video_polls"
   add_foreign_key "chat_events", "rooms"
+  add_foreign_key "preference_orders", "user_sessions"
+  add_foreign_key "preferences", "candidate_videos"
+  add_foreign_key "preferences", "preference_orders"
   add_foreign_key "user_sessions", "rooms"
   add_foreign_key "user_sessions", "users"
   add_foreign_key "video_polls", "rooms"
