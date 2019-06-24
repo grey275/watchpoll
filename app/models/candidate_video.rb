@@ -1,3 +1,3 @@
 class CandidateVideo < ApplicationRecord
-  belongs_to :videopoll
+  belongs_to :video_poll
 end
