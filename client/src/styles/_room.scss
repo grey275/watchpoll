@@ -1,12 +1,18 @@
 #room {
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 50px);
   display: grid;
-  grid-template-rows: min-content max-content;
+  position: relative;
   grid-template-columns: 65%  auto;
   grid-template-areas:
     "video poll"
     ". poll";
+  @media screen and (max-width: 768px) {
+  grid-template-columns: auto;
+  grid-template-areas:
+    "video"
+    "poll";
+  }
 }
 
 #tabs {
@@ -23,13 +29,13 @@
   display: flex;
   flex-direction: column;
 }
+
 #poll {
   grid-area: poll;
   width: 100%;
   height: 100%;
   overflow-y: scroll;
-  display: flex;
-  flex-direction: column;
+  // display: flex;
 }
 
 .video-candidate {

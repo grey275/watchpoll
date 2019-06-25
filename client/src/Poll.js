@@ -21,7 +21,7 @@ const Candidate = () => {
   );
 }
 
-const NewCandidate = () => (
+const NewCandidatePresenter = () => (
   <article className="video-candidate">
     <Image
       className="thumbnail"
@@ -31,15 +31,15 @@ const NewCandidate = () => (
     <h3 className="video-candidate__name">Rick the God</h3>
     <span className="video-candidate__icon-container">
       <Icon size="large" name="up arrow" />
+      100
     </span>
   </article>
 );
 class Poll extends React.Component {
-
   render() {
     return (
       <section id="poll">
-        {_.times(2, NewCandidate)}
+        {_.times(15, NewCandidatePresenter)}
       </section>
     );
   }

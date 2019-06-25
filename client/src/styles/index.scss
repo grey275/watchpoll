@@ -5,6 +5,8 @@ html {
   box-sizing: inherit;
 }
 
+$nav-height: 50px;
+
 body {
   height: 100vh;
   margin: 0;
@@ -21,9 +23,10 @@ code {
     monospace;
 }
 
-nav {
+#nav {
   position: sticky;
-  height: 5%;
+  height: 50px;
+  margin-bottom: 0px;
 }
 
 #root {
