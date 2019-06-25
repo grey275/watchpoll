@@ -5,39 +5,28 @@ class VideoPoll < ApplicationRecord
 
   def standings
     all_user_preferences = self.preference_orders
+    video_points_hash = self.candidate_videos.inject({}) do |video_points_hash, video|
+      video_points_hash[video.id] = 0
+      video_points_hash
+    end
+
     all_user_preferences
-      .map do |order|
+      .each do |order|
         user_preferences = order.preferences
         user_preferences
-          .map do |preference|
+          .each do |preference|
+            points = preference.position.nil? \
+              ? 0
+              : user_preferences.length - preference.position
             puts 'position: ' + preference.position.to_s
-            points = user_preferences.length - (preference.position || user_preferences.length)
             puts 'points: ' + points.to_s
-            {
-              video_id: preference.candidate_video.id,
-              video_uid: preference.candidate_video.video_uid,
-              points: points
-            }
+            video_points_hash[preference.candidate_video_id] += points
           end
-          .sort_by { |preference| -preference[:points]}
       end
+    video_points_hash.keys.map do |key|
+      points = video_points_hash[key]
+      video_uid = CandidateVideo.find(key).video_uid
+      {video_id: key, video_uid: video_uid, points: points}
+    end
   end
 end
-
-# ORIGINAL
-# def standings
-#   user_preferences = self.preference_orders
-#   user_preferences
-#     .map do |order|
-#       order
-#         .map do |preference|
-#           points = order.length - preference.position + 1
-#           {
-#             video_id: preference.candidate_video.id,
-#             video_uid: preference.candidate_video_uid,
-#             points: points
-#           }
-#         end
-#          .sort_by { |preference| -preference.points}
-#     end
-# end
