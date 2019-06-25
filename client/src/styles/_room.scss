@@ -1,0 +1,81 @@
+#room {
+  width: 100%;
+  height: calc(100vh - 50px);
+  display: grid;
+  position: relative;
+  grid-template-columns: 65%  auto;
+  grid-template-areas:
+    "video poll"
+    ". poll";
+  @media screen and (max-width: 768px) {
+  grid-template-columns: auto;
+  grid-template-areas:
+    "video"
+    "poll";
+  }
+}
+
+#tabs {
+  grid-area: tabs;
+}
+
+#video-container {
+  grid-area: video;
+  background-color: blue;
+}
+
+#chat {
+  grid-area: chat;
+  display: flex;
+  flex-direction: column;
+}
+
+#poll {
+  grid-area: poll;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  // display: flex;
+}
+
+.video-candidate {
+  display:grid;
+  grid-template-areas:
+    "thumbnail title title"
+    "thumbnail description icon-container";
+
+  grid-template-columns: max-content auto auto;
+}
+
+.video-candidate__name {
+  grid-area: title;
+  margin: 0;
+  align-self: flex-start
+}
+
+.video-candidate__icon-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  grid-area: icon-container;
+}
+
+.thumbnail {
+  grid-area: thumbnail;
+}
+
+.points {
+  float: right;
+  align-self: flex-end;
+  justify-self: flex-end;
+  margin-right: 1em;
+}
+
+#tag-list {
+  grid-area: tag-list;
+  display: flex;
+  // flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: flex-start;
+}
