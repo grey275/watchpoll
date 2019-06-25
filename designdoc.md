@@ -104,7 +104,7 @@ An interactive site to allow multiple users to view videos together and to vote 
 
   // returned by GET /rooms/[room_id]
   room_state = [users_state, poll_state, chat_state]
-
+```
 
 ```js
 channels, all identified by room_id
@@ -128,9 +128,7 @@ room = {
   id,
   video,
   users,
-  poll,
   standings,
-  chatEvents,
 }
 
 room_description = {
