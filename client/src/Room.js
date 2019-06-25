@@ -1,30 +1,37 @@
 import React from 'react';
+import { Tab } from 'semantic-ui-react';
+import { ActionCable } from 'actioncable';
 
+import { API_WS_ROOT } from './constants';
 import VideoPlayer from './VideoPlayer';
 import TagList from './TagList';
 import Chat from './Chat';
-import Poll from './Poll';
-import { Tab } from 'semantic-ui-react';
 
-class Room extends React.Component {
+class RoomContainer extends React.Component {
   constructor() {
     super();
     this.state = { someKey: 'someValue' };
   }
 
   render() {
-
     return (
-      <section id="room">
-        <VideoPlayer />
-        <Poll />
-      </section>
-    )
+      <RoomPresenter />
+    );
   }
 
   componentDidMount() {
-    this.setState({ someKey: 'otherValue' });
+
+
+    const cable = ActionCable.createConsumer(API_WS_ROOT);
+    cable.subscriptions.create("")
   }
 }
 
-export default Room;
+const RoomPresenter = () => (
+  <section id="room">
+    <VideoPlayer />
+    <Poll />
+  </section>
+);
+
+export default RoomContainer;

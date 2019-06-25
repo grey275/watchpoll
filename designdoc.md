@@ -128,9 +128,7 @@ room = {
   id,
   video,
   users,
-  poll,
   standings,
-  chatEvents,
 }
 
 room_description = {
