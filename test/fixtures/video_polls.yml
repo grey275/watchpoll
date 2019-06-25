@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  room: one
+  poll_open_time: 2019-06-22 17:08:30
+  played_video_id: MyString
+
+two:
+  room: two
+  poll_open_time: 2019-06-22 17:08:30
+  played_video_id: MyString
