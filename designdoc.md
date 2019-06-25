@@ -86,10 +86,11 @@ An interactive site to allow multiple users to view videos together and to vote 
   room_index = [id, name, descripiton]
   user = {id, username},
   playing_video = {startTime, duration, uri, skip_votes},
-  poll_video = {uri, votes:[ userid, ... ]},
-  vote = {user_id, candidate_video_id, vote_weight}
+  candidate_video = {video_id, points}
   user_message = {username, content},
   notification = {username, type: 'join' || 'leave'},
+
+  preference_order = [video_id /* preference: 0*/, ...]
 
   chatEvent = {
     type: 'user_message' || 'notification',
@@ -98,12 +99,12 @@ An interactive site to allow multiple users to view videos together and to vote 
 
   // compound
   users_state = [user, ...]
-  poll_state = [poll_video, ...]
+  poll_standings_state = [candidate_video, ...] // ordered by points descending
   chat_state = [ChatEvent, ...]
 
   // returned by GET /rooms/[room_id]
   room_state = [users_state, poll_state, chat_state]
-```
+
 
 ```js
 channels, all identified by room_id
@@ -112,8 +113,8 @@ channels, all identified by room_id
     - client gets users_state
 
   "poll_state_#[:room_id]':
-    - client gets poll_state
-    - server gets vote
+    - client gets poll_standings_state
+    - server gets preference_order
 
   chatroom_state_#[:room_id]
     - client gets chat
@@ -121,11 +122,14 @@ channels, all identified by room_id
 
 // in body from GET /api/room/[id]
 // initial room setup.. get entire current state of the room
+
+```js
 room = {
   id,
   video,
   users,
-  poll
+  poll,
+  standings,
   chatEvents,
 }
 

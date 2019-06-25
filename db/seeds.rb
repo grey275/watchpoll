@@ -8,16 +8,12 @@
 
 Preference.destroy_all
 PreferenceOrder.destroy_all
-Vote.destroy_all
 CandidateVideo.destroy_all
 VideoPoll.destroy_all
 UserSession.destroy_all
 
-#User.destroy_all
-#ActiveRecord::Base.connection.reset_pk_sequence!(User.users)
-
-#Room.destroy_all
-#ActiveRecord::Base.connection.reset_pk_sequence!(Room.rooms)
+User.destroy_all
+Room.destroy_all
 
 # --------------------------
 
@@ -27,13 +23,13 @@ room2 = Room.find_or_create_by! name: 'Room2', seed_playlist_id: 'PLtMJF5iI4w_Rn
 # Room.create(name: 'Room2', seed_playlist_id: 1, runtime: 15)
 # Room.create(name: 'Room3', seed_playlist_id: 1, runtime: 15)
 
-# --------------------------
+# # --------------------------
 user1 = User.find_or_create_by! username: 'User1'
 user2 = User.find_or_create_by! username: 'User2'
 # User.create!(username: 'User3')
 # User.create!(username: 'User4')
 
-# --------------------------
+# # --------------------------
 session1 = UserSession.create!(user: user1, room: room1, start: 1.days.ago)
 session2 = UserSession.create!(user: user2, room: room2, start: 1.days.ago)
 #room1.user_sessions.create!(user_id: 13, start: 1.days.ago)
@@ -84,7 +80,7 @@ CandidateVideo.create(
     video_poll: videopoll1
   )
 
-  #///
+#   #///
 
   CandidateVideo.create(
     video_uid: 'fUis9yny_lI',
@@ -111,11 +107,16 @@ vidselected2 = CandidateVideo.create(
     video_poll: videopoll2
   )
 
-#PreferenceOrder.destroy_all
+preference_order_list_1 = videopoll1.candidate_videos.map {|video| video.id}
 
-preference_order1 = PreferenceOrder.create!(user_session: session1)
+preference_order1 = PreferenceOrder.create_with_preference_order_list(
+  session1,
+  videopoll1,
+  preference_order_list_1,
+)
 
-#Preference.destroy_all
-
-
-preference1 = Preference.create(preference_order: preference_order1, candidate_video: vidselected1, position: 1)
+preference_order2 = PreferenceOrder.create_with_preference_order_list(
+  session2,
+  videopoll1,
+  preference_order_list_1,
+)

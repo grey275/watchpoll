@@ -37,7 +37,9 @@ ActiveRecord::Schema.define(version: 2019_06_24_005900) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_session_id"
+    t.bigint "video_poll_id"
     t.index ["user_session_id"], name: "index_preference_orders_on_user_session_id"
+    t.index ["video_poll_id"], name: "index_preference_orders_on_video_poll_id"
   end
 
   create_table "preferences", force: :cascade do |t|
@@ -97,6 +99,7 @@ ActiveRecord::Schema.define(version: 2019_06_24_005900) do
   add_foreign_key "candidate_videos", "video_polls"
   add_foreign_key "chat_events", "rooms"
   add_foreign_key "preference_orders", "user_sessions"
+  add_foreign_key "preference_orders", "video_polls"
   add_foreign_key "preferences", "candidate_videos"
   add_foreign_key "preferences", "preference_orders"
   add_foreign_key "user_sessions", "rooms"
