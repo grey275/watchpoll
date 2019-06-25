@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  room: one
+  type: 
+  data: MyString
+  timestamp: 2019-06-22 17:46:27
+
+two:
+  room: two
+  type: 
+  data: MyString
+  timestamp: 2019-06-22 17:46:27
