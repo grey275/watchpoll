@@ -3,7 +3,6 @@ class PreferenceOrder < ApplicationRecord
   belongs_to :user_session
   belongs_to :video_poll
 
-  def self.
 
   def self.create_with_preference_order_list(
     user_session,
