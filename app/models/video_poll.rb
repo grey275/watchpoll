@@ -13,6 +13,7 @@ class VideoPoll < ApplicationRecord
       end
       .flatten
 
+    puts "active users session count: " + active_user_sessions.count.to_s
     video_points_hash = tally self.candidate_videos, active_session_preferences
 
     video_points_hash

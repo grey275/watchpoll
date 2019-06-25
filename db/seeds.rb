@@ -31,7 +31,11 @@ user2 = User.find_or_create_by! username: 'User2'
 
 # # --------------------------
 session1 = UserSession.create!(user: user1, room: room1, start: 1.days.ago)
+
 session2 = UserSession.create!(user: user2, room: room2, start: 1.days.ago)
+
+session3 = UserSession.create!(user: user1, room: room1, start: 1.days.ago)
+session4 = UserSession.create!(user: user1, room: room1, start: 1.days.ago)
 #room1.user_sessions.create!(user_id: 13, start: 1.days.ago)
 #room1.user1.user_sessions.create!(start: 1.days.ago, end: 1.days.ago)
 # UserSession.create!(room_id: 1, user_id: 1, start: 1.days.ago, end: 1.days.ago)
@@ -116,7 +120,19 @@ preference_order1 = PreferenceOrder.create_with_preference_order_list(
 )
 
 preference_order2 = PreferenceOrder.create_with_preference_order_list(
-  session2,
+  session3,
+  videopoll1,
+  preference_order_list_1,
+)
+
+preference_order4 = PreferenceOrder.create_with_preference_order_list(
+  session4,
+  videopoll1,
+  preference_order_list_1,
+)
+
+preference_order4 = PreferenceOrder.create_with_preference_order_list(
+  session1,
   videopoll1,
   preference_order_list_1,
 )
