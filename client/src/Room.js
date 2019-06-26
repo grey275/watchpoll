@@ -1,12 +1,16 @@
 import React from 'react';
 import { Tab } from 'semantic-ui-react';
-import { ActionCable } from 'actioncable';
+import  ActionCable  from 'actioncable';
 
-import { API_WS_ROOT } from './constants';
 import VideoPlayer from './VideoPlayer';
 import TagList from './TagList';
 import Chat from './Chat';
+import Poll from './Poll'
+import Axios from 'axios';
 
+const { API_DOMAIN_NAME, SOCKET_ROUTE } = './constants';
+const full_socket_route = 'ws:/${SOCKET_ROUTE}.{API_DOMAIN_NAME}'
+console.log('socket_route: ', full_socket_route);
 class RoomContainer extends React.Component {
   constructor() {
     super();
@@ -20,10 +24,8 @@ class RoomContainer extends React.Component {
   }
 
   componentDidMount() {
-
-
-    const cable = ActionCable.createConsumer(API_WS_ROOT);
-    cable.subscriptions.create("")
+    const cable = ActionCable.createConsumer(full_socket_route);
+    cable.subscriptions.create("poll")
   }
 }
 
