@@ -18,8 +18,8 @@ Room.destroy_all
 # --------------------------
 
 #room1 = Room.create(name: 'Room1', seed_playlist_id: 'PLtMJF5iI4w_R97IGHws4XbC1i55FBXY1e', runtime: 15)
-room1 = Room.find_or_create_by! name: 'Room1', seed_playlist_id: 'PLtMJF5iI4w_R97IGHws4XbC1i55FBXY1e', runtime: 15
-room2 = Room.find_or_create_by! name: 'Room2', seed_playlist_id: 'PLtMJF5iI4w_RnTohhNAkQCgb0VNDXdsDV', runtime: 15
+room1 = Room.find_or_create_by! name: 'Room1', playlist_id: 'PLtMJF5iI4w_R97IGHws4XbC1i55FBXY1e', runtime: 15
+room2 = Room.find_or_create_by! name: 'Room2', playlist_id: 'PLtMJF5iI4w_RnTohhNAkQCgb0VNDXdsDV', runtime: 15
 # Room.create(name: 'Room2', seed_playlist_id: 1, runtime: 15)
 # Room.create(name: 'Room3', seed_playlist_id: 1, runtime: 15)
 
@@ -64,56 +64,57 @@ videopoll13= VideoPoll.create(
   played_video_id: 'eVTXPUF4Oz4'
 )
 
+video = Video.create(video_uid: 'eVTXPUF4Oz4')
 
 CandidateVideo.create(
-    video_uid: 'eVTXPUF4Oz4',
-    video_poll: videopoll1
+    video: video,
+    video_poll: videopoll1,
 )
 
   vidselected1 = CandidateVideo.create(
-    video_uid: 'vx2u5uUu3DE',
+    video_id: 'vx2u5uUu3DE',
     video_poll: videopoll1
   )
 
   CandidateVideo.create(
-    video_uid: 'TR3Vdo5etCQ',
+    video_id: 'TR3Vdo5etCQ',
     video_poll: videopoll1
   )
 
   CandidateVideo.create(
-    video_uid: '5anLPw0Efmo',
+    video_id: '5anLPw0Efmo',
     video_poll: videopoll1
   )
 
   CandidateVideo.create(
-    video_uid: 'Jne9t8sHpUc',
+    video_id: 'Jne9t8sHpUc',
     video_poll: videopoll1
   )
 
 #   #///
 
   CandidateVideo.create(
-    video_uid: 'fUis9yny_lI',
+    video_id: 'fUis9yny_lI',
     video_poll: videopoll2
 )
 
 vidselected2 = CandidateVideo.create(
-    video_uid: 'yL3lJfpenAc',
+    video_id: 'yL3lJfpenAc',
     video_poll: videopoll2
   )
 
   CandidateVideo.create(
-    video_uid: 'IzAO9A9GjgI',
+    video_id: 'IzAO9A9GjgI',
     video_poll: videopoll2
   )
 
   CandidateVideo.create(
-    video_uid: 'ILWSp0m9G2U',
+    video_id: 'ILWSp0m9G2U',
     video_poll: videopoll2
   )
 
   CandidateVideo.create(
-    video_uid: 'tn7kaOQvEfM',
+    video_id: 'tn7kaOQvEfM',
     video_poll: videopoll2
   )
 
