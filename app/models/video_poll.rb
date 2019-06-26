@@ -4,11 +4,30 @@ class VideoPoll < ApplicationRecord
   has_many :user_sessions
   has_many :candidate_videos
 
+  def get_unused_random_video
+    video = self.room.playlist.get_random_video
+    unused_count =  self.candidate_videos.inject(0) do |unused_count, candidate_video|
+      if candidate_video.video.id == video.id
+        unused_count
+      else
+        unused_count + 1
+      end
+    end
+    if unused_count == 0
+      return nil
+    end
+    unless already_used
+      return video
+    end
+    get_unused_random_video
+  end
+
   def standings
     active_user_sessions = self.room.user_sessions.where(end: nil)
 
     active_session_preferences = active_user_sessions
       .map do |user_session|
+
         user_session.preference_orders.last.preferences
       end
       .flatten
@@ -26,7 +45,9 @@ class VideoPoll < ApplicationRecord
       .sort_by {|video_standing| -video_standing[:points]}
   end
 
+  private
   def orda_count_formula(length, position)
+    puts "#{length} - #{position}"
     length - position
   end
 

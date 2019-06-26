@@ -44,8 +44,8 @@ user2 = User.find_or_create_by! username: 'User2'
 
 
 # # # --------------------------
-session1 = UserSession.create!(user: user1, room: room1, start: 1.days.ago)
-session2 = UserSession.create!(user: user2, room: room2, start: 1.days.ago)
+session1 = UserSession.create!(user: user1, room: room1, start: 1.days.ago, end: 0.days.ago)
+session2 = UserSession.create!(user: user2, room: room2, start: 1.days.ago, end: 0.days.ago)
 session3 = UserSession.create!(user: user1, room: room1, start: 1.days.ago)
 session4 = UserSession.create!(user: user1, room: room1, start: 1.days.ago)
 
@@ -55,6 +55,8 @@ video2 = Video.create(playlist: playlist1, video_uid: 'vx2u5uUu3DE')
 video3 = Video.create(playlist: playlist1, video_uid: 'TR3Vdo5etCQ')
 video4 = Video.create(playlist: playlist1, video_uid: '5anLPw0Efmo')
 video5 = Video.create(playlist: playlist1, video_uid: 'Jne9t8sHpUc')
+video6 = Video.create(playlist: playlist1, video_uid: 'Jne9t8sHpUc')
+video7 = Video.create(playlist: playlist1, video_uid: 'Jne9t8sHpUc')
 
 video1a = Video.create(playlist: playlist2, video_uid: 'fUis9yny_lI')
 video2a = Video.create(playlist: playlist2, video_uid: 'yL3lJfpenAc')
