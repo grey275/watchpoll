@@ -47,7 +47,7 @@ session4 = UserSession.create!(user: user1, room: room1, start: 1.days.ago)
 
 videopoll1 = VideoPoll.create(
     room: room1,
-    poll_open_time: 15 ,
+    poll_open_time: 15,
     played_video_id: 'eVTXPUF4Oz4'
 )
 
@@ -56,6 +56,12 @@ videopoll2 = VideoPoll.create(
     room: room2,
     poll_open_time: 15 ,
     played_video_id: 'fUis9yny_lI'
+)
+
+videopoll13= VideoPoll.create(
+  room: room1,
+  poll_open_time: 15 ,
+  played_video_id: 'eVTXPUF4Oz4'
 )
 
 
