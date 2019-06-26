@@ -20,7 +20,7 @@ class VideoPoll < ApplicationRecord
       .keys
       .map do |key|
         points = video_points_hash[key]
-        video_uid = CandidateVideo.find(key).video_uid
+        video_uid = CandidateVideo.find(key).video.video_uid
         {video_id: key, video_uid: video_uid, points: points}
       end
       .sort_by {|video_standing| -video_standing[:points]}
