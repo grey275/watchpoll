@@ -10,16 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_24_005900) do
+ActiveRecord::Schema.define(version: 2019_06_26_200226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "candidate_videos", force: :cascade do |t|
-    t.string "video_uid"
     t.bigint "video_poll_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "video_id"
     t.index ["video_poll_id"], name: "index_candidate_videos_on_video_poll_id"
   end
 
@@ -31,6 +31,12 @@ ActiveRecord::Schema.define(version: 2019_06_24_005900) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["room_id"], name: "index_chat_events_on_room_id"
+  end
+
+  create_table "playlists", force: :cascade do |t|
+    t.string "playlist_uid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "preference_orders", force: :cascade do |t|
@@ -54,16 +60,15 @@ ActiveRecord::Schema.define(version: 2019_06_24_005900) do
 
   create_table "rooms", force: :cascade do |t|
     t.string "name"
-    t.string "seed_playlist_id"
     t.integer "runtime"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "playlist_id"
   end
 
   create_table "user_sessions", force: :cascade do |t|
     t.bigint "room_id"
     t.bigint "user_id"
-    t.datetime "start"
     t.datetime "end"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -80,10 +85,18 @@ ActiveRecord::Schema.define(version: 2019_06_24_005900) do
   create_table "video_polls", force: :cascade do |t|
     t.bigint "room_id"
     t.time "poll_open_time"
-    t.string "played_video_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "played_video_id"
     t.index ["room_id"], name: "index_video_polls_on_room_id"
+  end
+
+  create_table "videos", force: :cascade do |t|
+    t.bigint "playlist_id"
+    t.string "video_uid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["playlist_id"], name: "index_videos_on_playlist_id"
   end
 
   create_table "votes", force: :cascade do |t|
@@ -97,14 +110,18 @@ ActiveRecord::Schema.define(version: 2019_06_24_005900) do
   end
 
   add_foreign_key "candidate_videos", "video_polls"
+  add_foreign_key "candidate_videos", "videos"
   add_foreign_key "chat_events", "rooms"
   add_foreign_key "preference_orders", "user_sessions"
   add_foreign_key "preference_orders", "video_polls"
   add_foreign_key "preferences", "candidate_videos"
   add_foreign_key "preferences", "preference_orders"
+  add_foreign_key "rooms", "playlists"
   add_foreign_key "user_sessions", "rooms"
   add_foreign_key "user_sessions", "users"
   add_foreign_key "video_polls", "rooms"
+  add_foreign_key "video_polls", "videos", column: "played_video_id"
+  add_foreign_key "videos", "playlists"
   add_foreign_key "votes", "candidate_videos"
   add_foreign_key "votes", "users"
 end
