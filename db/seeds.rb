@@ -10,20 +10,18 @@ Preference.destroy_all
 PreferenceOrder.destroy_all
 CandidateVideo.destroy_all
 VideoPoll.destroy_all
+Video.destroy_all
 UserSession.destroy_all
 
 User.destroy_all
 Room.destroy_all
-#Playlist.destroy_all
+Playlist.destroy_all
 
 
 playlist1 = Playlist.create( playlist_uid: 'PLtMJF5iI4w_R97IGHws4XbC1i55FBXY1e')
 playlist2 = Playlist.create( playlist_uid: 'PLtMJF5iI4w_RnTohhNAkQCgb0VNDXdsDV')
-# --------------------------
 
-#room1 = Room.create(name: 'Room1', seed_playlist_id: 'PLtMJF5iI4w_R97IGHws4XbC1i55FBXY1e', runtime: 15)
-# #room1 = Room.find_or_create_by! name: 'Room1', playlist_id: 'PLtMJF5iI4w_R97IGHws4XbC1i55FBXY1e', runtime: 15
-# #room2 = Room.find_or_create_by! name: 'Room2', playlist_id: 'PLtMJF5iI4w_RnTohhNAkQCgb0VNDXdsDV', runtime: 15
+# # # --------------------------
 
 room1 = Room.create!(
      name: 'Room1', 
@@ -68,19 +66,19 @@ videopoll1 = VideoPoll.create(
     room: room1,
     poll_open_time: 15,
     #played_video_id: 'eVTXPUF4Oz4'
-    played_video_id: video1
+    played_video_id: video1.id
 )
 
 videopoll2 = VideoPoll.create(
     room: room2,
     poll_open_time: 15 ,
-    played_video_id: 'fUis9yny_lI'
+    played_video_id: video1a.id
 )
 
 videopoll13= VideoPoll.create(
   room: room1,
   poll_open_time: 15 ,
-  played_video_id: 'eVTXPUF4Oz4'
+  played_video_id: video2.id
 )
 
 
@@ -138,28 +136,28 @@ vidselected2 = CandidateVideo.create(
     video_poll: videopoll2
   )
 
-# preference_order_list_1 = videopoll1.candidate_videos.map {|video| video.id}
+preference_order_list_1 = videopoll1.candidate_videos.map {|video| video.id}
 
-# preference_order1 = PreferenceOrder.create_with_preference_order_list(
-#   session1,
-#   videopoll1,
-#   preference_order_list_1,
-# )
+preference_order1 = PreferenceOrder.create_with_preference_order_list(
+  session1,
+  videopoll1,
+  preference_order_list_1,
+)
 
-# preference_order2 = PreferenceOrder.create_with_preference_order_list(
-#   session3,
-#   videopoll1,
-#   preference_order_list_1,
-# )
+preference_order2 = PreferenceOrder.create_with_preference_order_list(
+  session3,
+  videopoll1,
+  preference_order_list_1,
+)
 
-# preference_order4 = PreferenceOrder.create_with_preference_order_list(
-#   session4,
-#   videopoll1,
-#   preference_order_list_1,
-# )
+preference_order4 = PreferenceOrder.create_with_preference_order_list(
+  session4,
+  videopoll1,
+  preference_order_list_1,
+)
 
-# preference_order4 = PreferenceOrder.create_with_preference_order_list(
-#   session1,
-#   videopoll1,
-#   preference_order_list_1,
-# )
+preference_order4 = PreferenceOrder.create_with_preference_order_list(
+  session1,
+  videopoll1,
+  preference_order_list_1,
+)
