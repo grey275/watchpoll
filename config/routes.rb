@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   namespace :api do # /api/data
     resources :rooms, only: [:index, :show] do
       resources :poll, only: [:create]
+      resources :user_sessions, only: [:create]
     end
   end
 
