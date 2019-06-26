@@ -24,18 +24,18 @@ playlist2 = Playlist.create( playlist_uid: 'PLtMJF5iI4w_RnTohhNAkQCgb0VNDXdsDV')
 # # # --------------------------
 
 room1 = Room.create!(
-     name: 'Room1', 
-     playlist: playlist1, 
-     #playlist_id: 10, 
+     name: 'Room1',
+     playlist: playlist1,
+     #playlist_id: 10,
      runtime: 15
 )
 
 room2 = Room.create!(
-      name: 'Room2', 
-      playlist: playlist2, 
+      name: 'Room2',
+      playlist: playlist2,
       runtime: 15
 )
- 
+
 # # # --------------------------
 
 
