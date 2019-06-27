@@ -37,7 +37,7 @@ class Room < ApplicationRecord
   def current_video
     if self.video_polls.count > 1
       video_id = self.video_polls.second_to_last.played_video_id
-      Video.find video_id
+      video_id and Video.find(video_id)
     end
   end
 

@@ -8,32 +8,50 @@ import Chat from './Chat';
 import Poll from './Poll'
 import Axios from 'axios';
 
-const { API_DOMAIN_NAME, SOCKET_ROUTE } = './constants';
+import { DOMAIN_NAME, API_ROUTE, ROOM_ID } from './constants';
 const full_socket_route = 'ws:/${SOCKET_ROUTE}.{API_DOMAIN_NAME}'
 console.log('socket_route: ', full_socket_route);
 class RoomContainer extends React.Component {
-  constructor() {
-    super();
-    this.state = { someKey: 'someValue' };
+  constructor(props) {
+    super(props);
+    this.state = { standings: [] };
   }
 
   render() {
+    const { standings } = this.state
     return (
-      <RoomPresenter />
+      <RoomPresenter gapi={this.props.gapi} standings={standings}/>
     );
   }
 
+  async getVideosInfo(video_uids) {
+    await this.props.gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest");
+    const response = await this.props.gapi.client.youtube.videos.list({
+      part: 'snippet,contentDetails',
+      id: video_uids.join(),
+    })
+    console.log('response: ', response);
+  }
+
   componentDidMount() {
-    const cable = ActionCable.createConsumer(full_socket_route);
-    cable.subscriptions.create("poll")
+    Axios.get('http://localhost:3000/api/rooms/9')
+    .then(res => {
+
+    })
+    .then(res => {
+      this.setState({standings: res.data.standings})
+    })
+    // console.log(await Axios.get(`http://${DOMAIN_NAME}/${API_ROUTE}${ROOM_ID}`));
   }
 }
 
-const RoomPresenter = () => (
-  <section id="room">
-    <VideoPlayer />
-    <Poll />
-  </section>
-);
+const RoomPresenter = ({standings, gapi}) => {
+  return (
+    <section id="room">
+      <VideoPlayer gapi={gapi} />
+      <Poll standings={standings} gapi={gapi}/>
+    </section>
+  )
+};
 
 export default RoomContainer;

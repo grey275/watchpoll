@@ -16,7 +16,7 @@ class App extends Component {
     return (
       <div id="app">
         <Nav/>
-        <Room/>
+        <Room gapi={this.props.gapi}/>
       </div>
  );
   }

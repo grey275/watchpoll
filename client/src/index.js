@@ -4,13 +4,42 @@ import ReactDOM from 'react-dom';
 import './styles/index.scss';
 import 'semantic-ui-css/semantic.min.css';
 
+import * as serviceWorker from './serviceWorker'
 
 import App from './App';
-import * as serviceWorker from './serviceWorker';
+import { GOOGLE_API_KEY } from './constants'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const { gapi } = global;
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const start = () => {
+  gapi.client.init({
+    apiKey: GOOGLE_API_KEY,
+  })
+
+  ReactDOM.render(<App gapi={gapi} />, document.getElementById('root'));
+
+  // If you want your app to work offline and load faster, you can change
+  // unregister() to register() below. Note this comes with some pitfalls.
+  // Learn more about service workers: https://bit.ly/CRA-PWA
+  serviceWorker.unregister();
+}
+
+const test = () => {
+  gapi.client.init({
+    apiKey: GOOGLE_API_KEY,
+  })
+  .then(() => {
+    return gapi.client.request({
+      path: `https://www.googleapis.com/youtube/v3/playlistItems`,
+      params: {part: 'id,contentDetails',
+      key:'AIzaSyAQoqZ6oaSG5DP-zhSevbZRyorCIYiUgLs',
+      playlistId:'PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG',
+      prettyPrint: true}
+    }).then(response => {
+        console.log(response);
+      })
+  });
+
+}
+
+gapi.load('client', start)
