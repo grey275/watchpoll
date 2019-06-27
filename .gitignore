@@ -136,4 +136,3 @@ yarn-debug.log*
 /public
 .DS_Store
 config/database.yml
-"~/

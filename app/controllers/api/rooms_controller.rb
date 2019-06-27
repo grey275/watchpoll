@@ -9,9 +9,9 @@ class Api::RoomsController < ApplicationController
     room = Room.find(params[:id])
     render :json => {
       current_video_uid: room.current_video,
-      pool_playlist_uid: room.seed_playlist_id,
+      pool_playlist_uid: room.playlist.playlist_uid,
       standings: room.video_polls.last.standings,
-      users: room.user_sessions,
+      users: room.current_user_sessions,
     }
   end
 end
