@@ -19,6 +19,11 @@ gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+# Google API
+gem 'google-api-client', '>0.11'
+gem 'yt', '~> 0.32.0'
+
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
