@@ -6,7 +6,7 @@ class Playlist < ApplicationRecord
 
   def self.create(playlist_uid:)
     yt_playlist = Yt::Playlist.new(id: playlist_uid)
-
+    
     playlist = Playlist.new(
       playlist_uid: playlist_uid,
     )
