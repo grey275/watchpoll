@@ -9,12 +9,12 @@
       "request": "launch",
       "runtimeExecutable": "/usr/bin/chromium-browser",
       "runtimeArgs": [
-        "--user-data-dir=\"~/.config/chromium/Default\"",
+        "--user-data-dir=\"/home/pete/.config/chromium/Default\"",
         "--remote-debugging-port=9222"
       ],
       "name": "Launch Chromium against localhost",
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/public",
+      "webRoot": "${workspaceFolder}/client/public",
       "sourceMaps": true,
       "trace": true
     }

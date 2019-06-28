@@ -5,7 +5,7 @@ import {SortableContainer, SortableElement } from 'react-sortable-hoc';
 import Candidate from './Candidate';
 
 
-const SortableItem = SortableElement(({value}) => <li>{value}</li>);
+const SortableItem = SortableElement(({value}) => value);
 
 const SortableList = SortableContainer(({items}) => {
   return (
@@ -21,7 +21,7 @@ const SortableCandidate = ({ video_data, index }) => {
   const value = <Candidate {...video_data} />
   return (
     <SortableItem value={value}
-      key={video_data.video_id}
+      key={`index-${index}`}
       index={index}
       sortIndex={index}
       value={value}
@@ -30,16 +30,25 @@ const SortableCandidate = ({ video_data, index }) => {
 }
 
 class Poll extends React.Component {
-  render () {
-    const {standings_with_details} = this.props;
+  constructor(props) {
+    super(props)
+  }
 
-    let items = standings_with_details.map((video_data, index) => (
-      <SortableCandidate video_data={video_data} index={index} />
-    ));
+  render () {
+    const {standings, onSortEnd} = this.props;
+let items;
+    if (standings) {
+      items = standings.map((video_data, index) => (
+        <SortableCandidate video_data={video_data} index={index} />
+      ));
+    } else {
+      items = [];
+    }
 
     return (
       <SortableList
         items={items}
+        onSortEnd={onSortEnd}
       />
     );
   }

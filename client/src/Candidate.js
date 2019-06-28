@@ -1,6 +1,5 @@
 import React from 'react';
 import { Image, Icon } from 'semantic-ui-react';
-import { sortableElement, SortableElement } from 'react-sortable-hoc';
 
 const Candidate = ({channelTitle, title, points, thumbnails}) => {
   const displayed_thumbnail_url = thumbnails.medium.url

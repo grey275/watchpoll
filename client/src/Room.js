@@ -1,11 +1,9 @@
 import React from 'react';
-import { Tab, AccordionTitle } from 'semantic-ui-react';
 import  ActionCable  from 'actioncable';
 import _ from 'lodash';
+import arrayMove from 'array-move';
 
 import VideoPlayer from './VideoPlayer';
-import TagList from './TagList';
-import Chat from './Chat';
 import Poll from './Poll'
 import Axios from 'axios';
 
@@ -15,15 +13,16 @@ console.log('socket_route: ', full_socket_route);
 class RoomContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { standings: [], standings_with_details: [] };
+    this.state = {
+      standings: [],
+      standings_with_details: [],
+      preference_order_mapping: [],
+    };
   }
-
-  render() {
-    const { standings } = this.state
-    return (
-      <RoomPresenter gapi={this.props.gapi} {...this.state}/>
-    );
-  }
+  initPreferenceOrderMapping = length => (
+    _.shuffle( _.range(length))
+      .map(index => ({origin_index: index}))
+ )
 
   getRoomData = async () => {
     const response = await Axios.get('http://localhost:3000/api/rooms/9')
@@ -50,19 +49,51 @@ class RoomContainer extends React.Component {
   componentDidMount() {
     this.getRoomData()
       .then(data => {
-        console.log('data!')
-        this.setState({standings_with_details: data});
+        this.setState({
+          standings_with_details: data,
+          preference_order_mapping: this.initPreferenceOrderMapping(data.length),
+        });
       })
   }
+
+  get_ordered_standings() {
+    const { standings_with_details, preference_order_mapping } = this.state;
+    console.log(preference_order_mapping)
+    return preference_order_mapping.map(preference => standings_with_details[preference.origin_index])
+  }
+
+  onSortEnd = ({oldIndex, newIndex}) => {
+    console.log('sort end!');
+    this.setState(({preference_order_mapping}) => {
+      const new_preference_order_mapping = arrayMove(preference_order_mapping, oldIndex, newIndex);
+      new_preference_order_mapping[newIndex].moved = true;
+      return {preference_order_mapping: new_preference_order_mapping};
+    });
+  };
+
+
+  render() {
+    const { gapi } = this.props;
+    const { standings_length } = this.state;
+    const ordered_standings = this.get_ordered_standings();
+    console.log(ordered_standings)
+    return (
+      <section id="room">
+        <VideoPlayer gapi={gapi} />
+        <Poll standings={ordered_standings} standings_length={standings_length} onSortEnd={this.onSortEnd}/>
+      </section>
+    );
+  }
+
 }
 
-const RoomPresenter = ({standings_with_details, standings_length, gapi}) => {
+const RoomPresenter = ({standings, standings_length, onSortEnd, gapi}) => {
   return (
     <section id="room">
-      <VideoPlayer gapi={gapi} />
-      <Poll standings_with_details={standings_with_details} standings_length={standings_length} />
     </section>
   )
 };
+      // <VideoPlayer gapi={gapi} />
+      // <Poll standings={standings} standings_length={standings_length} onSortEnd={onSortEnd}/>
 
 export default RoomContainer;
