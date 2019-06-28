@@ -1,6 +1,7 @@
 import React from 'react';
-import { Tab } from 'semantic-ui-react';
+import { Tab, AccordionTitle } from 'semantic-ui-react';
 import  ActionCable  from 'actioncable';
+import _ from 'lodash';
 
 import VideoPlayer from './VideoPlayer';
 import TagList from './TagList';
@@ -14,42 +15,52 @@ console.log('socket_route: ', full_socket_route);
 class RoomContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { standings: [] };
+    this.state = { standings: [], standings_with_details: [] };
   }
 
   render() {
     const { standings } = this.state
     return (
-      <RoomPresenter gapi={this.props.gapi} standings={standings}/>
+      <RoomPresenter gapi={this.props.gapi} {...this.state}/>
     );
   }
 
-  async getVideosInfo(video_uids) {
+  getRoomData = async () => {
+    const response = await Axios.get('http://localhost:3000/api/rooms/9')
+    console.log('response: ', response.data)
+    const { standings } = response.data
+    const video_uids = standings.map(standing => standing.video_uid);
+    const video_items = await this.getVideoItems(video_uids);
+    const standings_with_details = _.zipWith(standings, video_items, (standings, item) => {
+      return {...standings, ...item.snippet};
+    })
+
+    return standings_with_details;
+  }
+
+  getVideoItems = async (video_uids) => {
     await this.props.gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest");
     const response = await this.props.gapi.client.youtube.videos.list({
-      part: 'snippet,contentDetails',
+      part: 'snippet',
       id: video_uids.join(),
     })
-    console.log('response: ', response);
+    return response.result.items;
   }
 
   componentDidMount() {
-    Axios.get('http://localhost:3000/api/rooms/9')
-    .then(res => {
-
-    })
-    .then(res => {
-      this.setState({standings: res.data.standings})
-    })
-    // console.log(await Axios.get(`http://${DOMAIN_NAME}/${API_ROUTE}${ROOM_ID}`));
+    this.getRoomData()
+      .then(data => {
+        console.log('data!')
+        this.setState({standings_with_details: data});
+      })
   }
 }
 
-const RoomPresenter = ({standings, gapi}) => {
+const RoomPresenter = ({standings_with_details, standings_length, gapi}) => {
   return (
     <section id="room">
       <VideoPlayer gapi={gapi} />
-      <Poll standings={standings} gapi={gapi}/>
+      <Poll standings_with_details={standings_with_details} standings_length={standings_length} />
     </section>
   )
 };
