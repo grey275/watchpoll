@@ -63,8 +63,8 @@ class RoomContainer extends React.Component {
   }
 
   onSortEnd = ({oldIndex, newIndex}) => {
-    console.log('sort end!');
     this.setState(({preference_order_mapping}) => {
+      console.log(this.getPreferenceOrder());
       const new_preference_order_mapping = arrayMove(preference_order_mapping, oldIndex, newIndex);
       new_preference_order_mapping[newIndex].moved = true;
       return {preference_order_mapping: new_preference_order_mapping};
@@ -72,28 +72,27 @@ class RoomContainer extends React.Component {
   };
 
 
+  getPreferenceOrder = () => {
+    const { preference_order_mapping, standings_with_details } = this.state;
+    const order =  preference_order_mapping.map(mapping => (
+      standings_with_details[mapping.origin_index].video_id
+    ));
+    return order;
+  }
+
   render() {
     const { gapi } = this.props;
     const { standings_length } = this.state;
     const ordered_standings = this.get_ordered_standings();
-    console.log(ordered_standings)
     return (
       <section id="room">
         <VideoPlayer gapi={gapi} />
-        <Poll standings={ordered_standings} standings_length={standings_length} onSortEnd={this.onSortEnd}/>
+        <Poll ordered_standings={ordered_standings} standings_length={standings_length} onSortEnd={this.onSortEnd}/>
       </section>
     );
   }
 
 }
 
-const RoomPresenter = ({standings, standings_length, onSortEnd, gapi}) => {
-  return (
-    <section id="room">
-    </section>
-  )
-};
-      // <VideoPlayer gapi={gapi} />
-      // <Poll standings={standings} standings_length={standings_length} onSortEnd={onSortEnd}/>
 
 export default RoomContainer;

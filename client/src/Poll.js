@@ -29,16 +29,13 @@ const SortableCandidate = ({ video_data, index }) => {
   );
 }
 
-class Poll extends React.Component {
-  constructor(props) {
-    super(props)
-  }
 
+class Poll extends React.Component {
   render () {
-    const {standings, onSortEnd} = this.props;
+    const {ordered_standings, onSortEnd} = this.props;
 let items;
-    if (standings) {
-      items = standings.map((video_data, index) => (
+    if (ordered_standings) {
+      items = ordered_standings.map((video_data, index) => (
         <SortableCandidate video_data={video_data} index={index} />
       ));
     } else {
