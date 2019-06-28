@@ -18,7 +18,7 @@ Room.destroy_all
 Playlist.destroy_all
 
 
-playlist1 = Playlist.create( playlist_uid: 'PLtMJF5iI4w_R97IGHws4XbC1i55FBXY1e')
+playlist1 = Playlist.create(playlist_uid: 'PLtMJF5iI4w_R97IGHws4XbC1i55FBXY1e')
 playlist2 = Playlist.create( playlist_uid: 'PLtMJF5iI4w_RnTohhNAkQCgb0VNDXdsDV')
 
 # # # --------------------------
@@ -49,94 +49,9 @@ session2 = UserSession.create!(user: user2, room: room2, start: 1.days.ago, end:
 session3 = UserSession.create!(user: user1, room: room1, start: 1.days.ago)
 session4 = UserSession.create!(user: user1, room: room1, start: 1.days.ago)
 
-# # --------------------------
-video1 = Video.create(playlist: playlist1, video_uid: 'eVTXPUF4Oz4')
-video2 = Video.create(playlist: playlist1, video_uid: 'vx2u5uUu3DE')
-video3 = Video.create(playlist: playlist1, video_uid: 'TR3Vdo5etCQ')
-video4 = Video.create(playlist: playlist1, video_uid: '5anLPw0Efmo')
-video5 = Video.create(playlist: playlist1, video_uid: 'Jne9t8sHpUc')
-video6 = Video.create(playlist: playlist1, video_uid: 'Jne9t8sHpUc')
-video7 = Video.create(playlist: playlist1, video_uid: 'Jne9t8sHpUc')
 
-video1a = Video.create(playlist: playlist2, video_uid: 'fUis9yny_lI')
-video2a = Video.create(playlist: playlist2, video_uid: 'yL3lJfpenAc')
-video3a = Video.create(playlist: playlist2, video_uid: 'IzAO9A9GjgI')
-video4a = Video.create(playlist: playlist2, video_uid: 'ILWSp0m9G2U')
-video5a = Video.create(playlist: playlist2, video_uid: 'tn7kaOQvEfM')
-
-videopoll1 = VideoPoll.create(
-    room: room1,
-    poll_open_time: 15,
-    #played_video_id: 'eVTXPUF4Oz4'
-    played_video_id: video1.id
-)
-
-videopoll2 = VideoPoll.create(
-    room: room2,
-    poll_open_time: 15 ,
-    played_video_id: video1a.id
-)
-
-videopoll13= VideoPoll.create(
-  room: room1,
-  poll_open_time: 15 ,
-  played_video_id: video2.id
-)
-
-
-
-CandidateVideo.create(
-    video: video1,
-    video_poll: videopoll1,
-)
-
-  vidselected1 = CandidateVideo.create(
-    video: video2,
-    video_poll: videopoll1
-  )
-
-  CandidateVideo.create(
-    video: video3,
-    video_poll: videopoll1
-  )
-
-  CandidateVideo.create(
-    video: video4,
-    video_poll: videopoll1
-  )
-
-  CandidateVideo.create(
-    video: video5,
-    video_poll: videopoll1
-  )
-
-#   #///
-
-
-  CandidateVideo.create(
-    video: video1a,
-    video_poll: videopoll2
-)
-
-vidselected2 = CandidateVideo.create(
-    video: video2a,
-    video_poll: videopoll2
-  )
-
-  CandidateVideo.create(
-    video: video3a,
-    video_poll: videopoll2
-  )
-
-  CandidateVideo.create(
-    video: video4a,
-    video_poll: videopoll2
-  )
-
-  CandidateVideo.create(
-    video: video5a,
-    video_poll: videopoll2
-  )
+videopoll1 = room1.generate_video_poll
+ap videopoll1
 
 preference_order_list_1 = videopoll1.candidate_videos.map {|video| video.id}
 

@@ -26,7 +26,7 @@ class RoomContainer extends React.Component {
  )
 
   getRoomData = async () => {
-    const response = await Axios.get('http://localhost:3000/api/rooms/9')
+    const response = await Axios.get('http://localhost:3000/api/rooms/26')
     console.log('response: ', response.data)
     const { standings, current_video  } = response.data
 
