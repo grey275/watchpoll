@@ -29,7 +29,6 @@ const SortableCandidate = ({ video_data, index }) => {
   );
 }
 
-
 class Poll extends React.Component {
   render () {
     const {ordered_standings, onSortEnd} = this.props;

@@ -16,6 +16,7 @@ class RoomContainer extends React.Component {
     this.state = {
       standings: [],
       standings_with_details: [],
+      current_video: null,
       preference_order_mapping: [],
     };
   }
@@ -27,14 +28,15 @@ class RoomContainer extends React.Component {
   getRoomData = async () => {
     const response = await Axios.get('http://localhost:3000/api/rooms/9')
     console.log('response: ', response.data)
-    const { standings } = response.data
+    const { standings, current_video  } = response.data
+
     const video_uids = standings.map(standing => standing.video_uid);
     const video_items = await this.getVideoItems(video_uids);
     const standings_with_details = _.zipWith(standings, video_items, (standings, item) => {
       return {...standings, ...item.snippet};
     })
 
-    return standings_with_details;
+    return {standings_with_details, current_video};
   }
 
   getVideoItems = async (video_uids) => {
@@ -49,9 +51,10 @@ class RoomContainer extends React.Component {
   componentDidMount() {
     this.getRoomData()
       .then(data => {
+        console.log('data', data);
         this.setState({
-          standings_with_details: data,
-          preference_order_mapping: this.initPreferenceOrderMapping(data.length),
+          ...data,
+          preference_order_mapping: this.initPreferenceOrderMapping(data.standings_with_details.length),
         });
       })
   }
@@ -70,7 +73,6 @@ class RoomContainer extends React.Component {
       return {preference_order_mapping: new_preference_order_mapping};
     });
   };
-
 
   getPreferenceOrder = () => {
     const { preference_order_mapping, standings_with_details } = this.state;
