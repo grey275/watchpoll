@@ -1,28 +1,52 @@
 import React from 'react';
 import _ from 'lodash';
-import { Card, Image, Icon, Grid, Item, Button, Label } from 'semantic-ui-react';
+import {SortableContainer, SortableElement } from 'react-sortable-hoc';
 
 import Candidate from './Candidate';
-import axios from 'axios';
+
+
+const SortableItem = SortableElement(({value}) => value);
+
+const SortableList = SortableContainer(({items}) => {
+  return (
+    <ul>
+      {items.map((value, index) => (
+        <SortableItem key={`item-${index}`} index={index} value={value} />
+      ))}
+    </ul>
+  );
+});
+
+const SortableCandidate = ({ video_data, index }) => {
+  const value = <Candidate {...video_data} />
+  return (
+    <SortableItem value={value}
+      key={`index-${index}`}
+      index={index}
+      sortIndex={index}
+      value={value}
+    />
+  );
+}
 
 class Poll extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {}
-  }
-  render() {
-    const candidates = this.props.standings.map(data => <Candidate {...data} key={data.video_id} />)
-    return (
-      <section id="poll">
-        {candidates}
-      </section>
-    );
-  }
+  render () {
+    const {ordered_standings, onSortEnd} = this.props;
+let items;
+    if (ordered_standings) {
+      items = ordered_standings.map((video_data, index) => (
+        <SortableCandidate video_data={video_data} index={index} />
+      ));
+    } else {
+      items = [];
+    }
 
-  componentDidMount() {
-    const { standings } = this.props;
-    const video_uids = standings.map(standing => standing.video_uid);
-    this.getVideosInfo(video_uids);
+    return (
+      <SortableList
+        items={items}
+        onSortEnd={onSortEnd}
+      />
+    );
   }
 }
 
