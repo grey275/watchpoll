@@ -20,7 +20,6 @@ gem 'redis', '~> 4.0'
 # gem 'bcrypt', '~> 3.1.7'
 
 # Google API
-gem 'google-api-client', '>0.11'
 gem 'yt', '~> 0.32.0'
 
 
