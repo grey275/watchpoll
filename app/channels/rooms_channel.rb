@@ -2,6 +2,8 @@ class RoomsChannel < ApplicationCable::Channel
   def subscribed
     puts 'Subscribed!'
     @room = Room.find(params[:room_id])
+    @user = User.create({username: 'bob'})
+    @session = UserSession.create(room: @room, user: @user)
     puts('room id ' + @room.id.to_s)
     stream_for @room
     RoomsChannel.broadcast_to(
@@ -11,8 +13,9 @@ class RoomsChannel < ApplicationCable::Channel
         pool_playlist_uid: @room.playlist.playlist_uid,
         standings: @room.video_polls.last.standings,
         users: @room.current_user_sessions,
-        new_poll: true,
-      }
+        poll_id: @room.current_video_poll.id,
+        session_id: @session.id,
+      },
     )
   end
 

@@ -41,6 +41,13 @@ class Room < ApplicationRecord
     end
   end
 
+  def current_video_poll
+    unless self.video_polls.count > 0
+      return nil
+    end
+    self.video_polls.last
+  end
+
   def current_user_sessions
     self.user_sessions.where end: nil
   end

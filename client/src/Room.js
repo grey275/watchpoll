@@ -16,6 +16,8 @@ class RoomContainer extends React.Component {
       candidate_videos: [],
       current_video: null,
       preference_order_mapping: [],
+      session_id: null,
+      poll_id: [],
     };
   }
 
@@ -26,19 +28,18 @@ class RoomContainer extends React.Component {
       { ...standing.video_id, ...item.snippet }
     ));
   }
-  UpdateStandingsWithDetailsPoints = (standings) => {
-  }
 
-  handleRoomBroadcast = async ({ standings, new_poll }) => {
+  handleRoomBroadcast = async ({ standings, poll_id, session_id }) => {
     console.log('standings: ', standings)
-    console.log('new_poll: ', new_poll)
-    if (new_poll) {
+    console.log('session_id', session_id)
+    console.log('poll_id: ', poll_id)
+    if (this.state.poll_id !== poll_id) {
       this.setState({
         candidate_videos: await this.getNewCandidateVideos(standings),
-        standings,
+        standings, session_id, poll_id
       })
     } else {
-      this.setState({standings});
+      this.setState({standings, session_id});
     }
   }
 
@@ -69,7 +70,7 @@ class RoomContainer extends React.Component {
   }
   render() {
     const { gapi } = this.props;
-    const { candidate_videos, standings } = this.state;
+    const { candidate_videos, standings, session_id, poll_id } = this.state;
     const candidate_videos_with_points = _.zipWith(
       candidate_videos, standings,
       (video, standing) => ({
@@ -81,6 +82,9 @@ class RoomContainer extends React.Component {
         <Poll
           candidate_videos_with_points={candidate_videos_with_points}
           onSortEnd={this.onSortEnd}
+          standings={standings}
+          session_id={session_id}
+          poll_id={poll_id}
         />
       </section>
     );

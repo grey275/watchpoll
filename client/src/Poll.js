@@ -4,6 +4,8 @@ import {SortableContainer, SortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 
 import Candidate from './Candidate';
+import Axios from 'axios';
+import { DOMAIN_NAME, ROOM_ID, API_ROUTE } from './constants';
 
 
 const SortableItem = SortableElement(({value}) => value);
@@ -44,13 +46,21 @@ class Poll extends React.Component {
       .map(index => ({origin_index: index}))
   )
 
-  getPreferenceOrder = () => {
+  submitPreferenceOrder = () => {
     const { preference_order } = this.state;
-    const { candidate_videos_with_points } = this.props;
-    const order =  preference_order.map(mapping => (
-      candidate_videos_with_points[mapping.origin_index].video_id
+    const { standings, poll_id, session_id } = this.props;
+    const order =  preference_order.map(({origin_index}) => (
+      standings[origin_index].video_id
     ));
-    return order;
+    console.log('order: ', order)
+    Axios.post(
+      `http://${DOMAIN_NAME}/${API_ROUTE}/rooms/${ROOM_ID}/video_polls/${poll_id}/preference_orders`,
+      {
+        session_id,
+        poll_id,
+        preference_order: order,
+      }
+    )
   }
 
   getOrderedCandidateVideos() {
@@ -77,7 +87,7 @@ class Poll extends React.Component {
       new_preference_order[newIndex].moved = true;
       return {preference_order: new_preference_order};
     });
-    this.getPreferenceOrder({})
+    this.submitPreferenceOrder()
   };
 
   render () {
