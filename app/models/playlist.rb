@@ -1,4 +1,7 @@
 Yt.configuration.api_key = 'AIzaSyAQoqZ6oaSG5DP-zhSevbZRyorCIYiUgLs'
+Yt.configure do |config|
+  config.log_level = :debug
+end
 
 class Playlist < ApplicationRecord
   has_many :videos
