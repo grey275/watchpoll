@@ -29,27 +29,37 @@ class RoomContainer extends React.Component {
     ));
   }
 
-  handleRoomBroadcast = async ({ standings, poll_id, session_id }) => {
+  handleRoomBroadcast = async ({ standings, poll_id }) => {
     console.log('standings: ', standings)
-    console.log('session_id', session_id)
     console.log('poll_id: ', poll_id)
     if (this.state.poll_id !== poll_id) {
       this.setState({
         candidate_videos: await this.getNewCandidateVideos(standings),
-        standings, session_id, poll_id
+        standings, poll_id
       })
     } else {
-      this.setState({standings, session_id});
+      this.setState({standings});
     }
+  }
+
+  getSessionId = async () => {
+    const response = await Axios.post(`http://${DOMAIN_NAME}/${API_ROUTE}/rooms/${ROOM_ID}/user_sessions`);
+    console.log('session id', response.data.session_id)
+    return response.data.session_id
   }
 
   subscribeToChannels = async () => {
     const cable = ActionCable.createConsumer(`http://${DOMAIN_NAME}/${SOCKET_ROUTE}`)
     console.log('room id: ', ROOM_ID);
-    cable.subscriptions.create({
+    console.log(cable)
+    global.cable = cable
+    const rooms_channel = cable.subscriptions.create({
       channel: 'RoomsChannel',
       room_id: ROOM_ID,
     }, {
+      connected: () => {
+        rooms_channel.send({session_id: this.state.session_id});
+       },
       received: this.handleRoomBroadcast,
     })
     console.log('subbed!')
@@ -65,8 +75,13 @@ class RoomContainer extends React.Component {
     return response.result.items;
   }
 
+  broadcastSetup = async () => {
+    this.setState({session_id: await this.getSessionId()})
+    this.subscribeToChannels()
+  }
+
   componentDidMount() {
-    this.subscribeToChannels();
+    this.broadcastSetup()
   }
   render() {
     const { gapi } = this.props;

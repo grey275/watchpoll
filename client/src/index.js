@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ActionCableProvider } from 'react-actioncable-provider';
 
 import './styles/index.scss';
 import 'semantic-ui-css/semantic.min.css';

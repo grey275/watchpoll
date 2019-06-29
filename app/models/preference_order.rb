@@ -10,13 +10,13 @@ class PreferenceOrder < ApplicationRecord
   )
     p_order = self.create(user_session: user_session, video_poll: video_poll)
     preference_order_list.each_with_index do |video_id, index|
-      puts 'video_id' + video_id.to_s
       Preference.create(
         preference_order: p_order,
         candidate_video_id: video_id,
         position: index
       )
     end
+    room = user_session.room
     p_order
   end
 end

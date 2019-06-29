@@ -43,6 +43,7 @@ Rails.application.configure do
 
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = true
+  config.active_record.logger = nil;
 
 
   # Raises error for missing translations

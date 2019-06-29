@@ -34,7 +34,6 @@ class VideoPoll < ApplicationRecord
       end
       .flatten
 
-    puts "active users session count: " + active_user_sessions.count.to_s
     video_points_hash = tally self.candidate_videos, active_session_preferences
 
     video_points_hash
@@ -44,12 +43,10 @@ class VideoPoll < ApplicationRecord
         video_uid = CandidateVideo.find(key).video.video_uid
         {video_id: key, video_uid: video_uid, points: points}
       end
-      .sort_by {|video_standing| -video_standing[:points]}
   end
 
   private
   def orda_count_formula(length, position)
-    puts "#{length} - #{position}"
     length - position
   end
 

@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import { ActionCableConsumer } from 'react-actioncable-provider';
 
 import { API_WS_ROOT } from './constants';
 import Room from './Room';
