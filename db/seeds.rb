@@ -61,14 +61,14 @@ preference_order1 = PreferenceOrder.create_with_preference_order_list(
   )
   preference_order2 = PreferenceOrder.create_with_preference_order_list(
     session1,
-    videopoll1,
-    preference_order_list_1,
+    videopoll2,
+    preference_order_list_2,
   )
   
   preference_order3 = PreferenceOrder.create_with_preference_order_list(
     session3,
     videopoll2,
-    preference_order_list_1,
+    preference_order_list_2,
   )
     
   preference_order4 = PreferenceOrder.create_with_preference_order_list(
