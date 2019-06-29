@@ -99,7 +99,7 @@ An interactive site to allow multiple users to view videos together and to vote 
 
   // compound
   users_state = [user, ...]
-  poll_standings_state = [candidate_video, ...] // ordered by points descending
+  poll_standings_state = [candidate_video, ...]
   chat_state = [ChatEvent, ...]
 
   // returned by GET /rooms/[room_id]
@@ -166,3 +166,7 @@ room_description = {
 - routes
 - review wireframe
 - semantic-ui
+
+
+
+cases
