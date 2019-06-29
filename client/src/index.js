@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 import './styles/index.scss';
 import 'semantic-ui-css/semantic.min.css';
@@ -16,7 +17,12 @@ const start = () => {
     apiKey: GOOGLE_API_KEY,
   })
 
-  ReactDOM.render(<App gapi={gapi} />, document.getElementById('root'));
+  // ReactDOM.render(<App gapi={gapi} />, document.getElementById('root'));
+  ReactDOM.render((
+    <BrowserRouter>
+      <App gapi={gapi} />
+    </BrowserRouter>
+    ), document.getElementById('root'));
 
   // If you want your app to work offline and load faster, you can change
   // unregister() to register() below. Note this comes with some pitfalls.

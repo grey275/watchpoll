@@ -4,6 +4,7 @@ import axios from 'axios';
 import { API_WS_ROOT } from './constants';
 import Room from './Room';
 import Nav from './Nav';
+import Main from './Main';
 
 class App extends Component {
   constructor(props) {
@@ -15,8 +16,9 @@ class App extends Component {
   render() {
     return (
       <div id="app">
-        <Nav/>
-        <Room gapi={this.props.gapi}/>
+        <Nav/> 
+        <Main/> 
+        {/* <Room gapi={this.props.gapi}/> */}
       </div>
  );
   }

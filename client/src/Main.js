@@ -1,0 +1,20 @@
+import React from 'react'
+import { Switch, Route } from 'react-router-dom'
+
+import Room from './Room'
+import About from './About'
+import New from './New'
+
+//import New from './New'
+
+const Main = () => (
+    <main>
+      <Switch>
+        <Route exact path='/' component={Room}/>  
+        <Route path='/about' component={About}/>
+        <Route path='/new' component={New}/>
+      </Switch>
+    </main>
+  )
+  
+  export default Main

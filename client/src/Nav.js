@@ -1,5 +1,6 @@
 import React from 'react';
 import { Menu, Header } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 class Nav extends React.Component {
   constructor() {
@@ -13,16 +14,19 @@ class Nav extends React.Component {
         <Menu.Item
           as={Header}
         >
-          WatchPoll
+          {/* WatchPoll */}
+          <Link to='/'>WatchPoll</Link>
         </Menu.Item>
         <Menu.Menu
           position="right"
         >
           <Menu.Item>
-            About
+            {/* About */}
+            <Link to='/about'>About</Link>
           </Menu.Item>
           <Menu.Item>
-            New
+            {/* New */}
+            <Link to='/new'>New</Link>
           </Menu.Item>
         </Menu.Menu>
       </Menu>
