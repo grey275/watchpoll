@@ -7,14 +7,14 @@ import New from './New'
 
 //import New from './New'
 
-const Main = () => (
+const Main = ({gapi}) => (
     <main>
       <Switch>
-        <Route exact path='/' component={Room}/>  
+        <Route exact path='/' render={() => <Room gapi={gapi} />} />
         <Route path='/about' component={About}/>
         <Route path='/new' component={New}/>
       </Switch>
     </main>
   )
-  
+
   export default Main

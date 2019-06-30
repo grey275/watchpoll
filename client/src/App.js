@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import { API_WS_ROOT } from './constants';
-import Room from './Room';
 import Nav from './Nav';
 import Main from './Main';
 
@@ -15,9 +13,8 @@ class App extends Component {
   render() {
     return (
       <div id="app">
-        <Nav/> 
-        <Main/> 
-        {/* <Room gapi={this.props.gapi}/> */}
+        <Nav/>
+        <Main gapi={this.props.gapi}/>
       </div>
  );
   }
