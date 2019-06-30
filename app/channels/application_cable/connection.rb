@@ -1,9 +1,8 @@
 module ApplicationCable
   class Connection < ActionCable::Connection::Base
-    identified_by :current_user
+    identified_by :user
 
     def connect
-      self.current_user = session[:user]
     end
   end
 end

@@ -26,8 +26,10 @@ class VideoPoll < ApplicationRecord
     active_user_sessions = self.room.user_sessions.where(end: nil)
 
     active_session_preferences = active_user_sessions
+      .select do |user_session|
+        user_session.preference_orders.length > 0
+      end
       .map do |user_session|
-
         user_session.preference_orders.last.preferences
       end
       .flatten
