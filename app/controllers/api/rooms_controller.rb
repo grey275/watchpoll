@@ -3,7 +3,7 @@ class Api::RoomsController < ApplicationController
     results = Room.all.map { |u| {
       room_id: u.id, 
       room_name: u.name,
-      playlist_id: u.playlist_id,
+      # playlist_id: u.playlist_id,
       playlist_uid: u.playlist.playlist_uid,
       current_video_id: u.current_video
       }
