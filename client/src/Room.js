@@ -1,42 +1,71 @@
 import React from 'react';
 import  ActionCable  from 'actioncable';
 import _ from 'lodash';
-import arrayMove from 'array-move';
 
 import VideoPlayer from './VideoPlayer';
 import Poll from './Poll'
 import Axios from 'axios';
 
-import { DOMAIN_NAME, API_ROUTE, ROOM_ID } from './constants';
-const full_socket_route = 'ws:/${SOCKET_ROUTE}.{API_DOMAIN_NAME}'
-console.log('socket_route: ', full_socket_route);
+import { DOMAIN_NAME, API_ROUTE, SOCKET_ROUTE, ROOM_ID } from './constants';
+
 class RoomContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       standings: [],
-      standings_with_details: [],
+      candidate_videos: [],
       current_video: null,
       preference_order_mapping: [],
+      session_id: null,
+      poll_id: [],
     };
   }
-  initPreferenceOrderMapping = length => (
-    _.shuffle( _.range(length))
-      .map(index => ({origin_index: index}))
- )
 
-  getRoomData = async () => {
-    const response = await Axios.get('http://localhost:3000/api/rooms/26')
-    console.log('response: ', response.data)
-    const { standings, current_video  } = response.data
-
+  getNewCandidateVideos = async (standings) => {
+    console.log('getting candidate videos')
     const video_uids = standings.map(standing => standing.video_uid);
     const video_items = await this.getVideoItems(video_uids);
-    const standings_with_details = _.zipWith(standings, video_items, (standings, item) => {
-      return {...standings, ...item.snippet};
-    })
+    return _.zipWith(standings, video_items, (standing, item) => (
+      { ...standing.video_id, ...item.snippet }
+    ));
+  }
 
-    return {standings_with_details, current_video};
+  handleRoomBroadcast = async ({ standings, poll_id }) => {
+    standings.video_id = standings.candidate_video_id
+    console.log('standings: ', standings)
+    console.log('poll_id: ', poll_id)
+    if (this.state.poll_id !== poll_id) {
+      console.log('new poll!!!')
+      this.setState({
+        candidate_videos: await this.getNewCandidateVideos(standings),
+        standings, poll_id
+      })
+    } else {
+      this.setState({standings});
+    }
+  }
+
+  getSessionId = async () => {
+    const response = await Axios.post(`http://${DOMAIN_NAME}/${API_ROUTE}/rooms/${ROOM_ID}/user_sessions`);
+    console.log('session id', response.data.session_id)
+    return response.data.session_id
+  }
+
+  subscribeToChannels = async () => {
+    const cable = ActionCable.createConsumer(`http://${DOMAIN_NAME}/${SOCKET_ROUTE}`)
+    console.log('room id: ', ROOM_ID);
+    console.log(cable)
+    global.cable = cable
+    const rooms_channel = cable.subscriptions.create({
+      channel: 'RoomsChannel',
+      room_id: ROOM_ID,
+    }, {
+      connected: () => {
+        rooms_channel.send({session_id: this.state.session_id});
+       },
+      received: this.handleRoomBroadcast,
+    })
+    console.log('subbed!')
   }
 
   getVideoItems = async (video_uids) => {
@@ -45,51 +74,36 @@ class RoomContainer extends React.Component {
       part: 'snippet',
       id: video_uids.join(),
     })
+    console.log('items: ', response.result.items)
     return response.result.items;
   }
 
+  broadcastSetup = async () => {
+    this.setState({session_id: await this.getSessionId()})
+    this.subscribeToChannels()
+  }
+
   componentDidMount() {
-    this.getRoomData()
-      .then(data => {
-        console.log('data', data);
-        this.setState({
-          ...data,
-          preference_order_mapping: this.initPreferenceOrderMapping(data.standings_with_details.length),
-        });
-      })
+    this.broadcastSetup()
   }
-
-  get_ordered_standings() {
-    const { standings_with_details, preference_order_mapping } = this.state;
-    console.log(preference_order_mapping)
-    return preference_order_mapping.map(preference => standings_with_details[preference.origin_index])
-  }
-
-  onSortEnd = ({oldIndex, newIndex}) => {
-    this.setState(({preference_order_mapping}) => {
-      console.log(this.getPreferenceOrder());
-      const new_preference_order_mapping = arrayMove(preference_order_mapping, oldIndex, newIndex);
-      new_preference_order_mapping[newIndex].moved = true;
-      return {preference_order_mapping: new_preference_order_mapping};
-    });
-  };
-
-  getPreferenceOrder = () => {
-    const { preference_order_mapping, standings_with_details } = this.state;
-    const order =  preference_order_mapping.map(mapping => (
-      standings_with_details[mapping.origin_index].video_id
-    ));
-    return order;
-  }
-
   render() {
     const { gapi } = this.props;
-    const { standings_length } = this.state;
-    const ordered_standings = this.get_ordered_standings();
+    const { candidate_videos, standings, session_id, poll_id } = this.state;
+    const candidate_videos_with_points = _.zipWith(
+      candidate_videos, standings,
+      (video, standing) => ({
+      ...video ,...standing,
+    }))
     return (
       <section id="room">
         <VideoPlayer gapi={gapi} />
-        <Poll ordered_standings={ordered_standings} standings_length={standings_length} onSortEnd={this.onSortEnd}/>
+        <Poll
+          candidate_videos_with_points={candidate_videos_with_points}
+          onSortEnd={this.onSortEnd}
+          standings={standings}
+          session_id={session_id}
+          poll_id={poll_id}
+        />
       </section>
     );
   }

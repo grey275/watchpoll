@@ -18,6 +18,7 @@ class Playlist < ApplicationRecord
       Video.create(
         video_uid: item.video_id,
         playlist: playlist,
+        title: item.title
       )
     end
     playlist.save

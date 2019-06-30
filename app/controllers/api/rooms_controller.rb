@@ -7,6 +7,9 @@ class Api::RoomsController < ApplicationController
 
   def show
     room = Room.find(params[:id])
+    unless room
+
+    end
     render :json => {
       current_video_uid: room.current_video,
       pool_playlist_uid: room.playlist.playlist_uid,

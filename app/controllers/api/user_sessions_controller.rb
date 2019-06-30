@@ -1,8 +1,8 @@
 class Api::UserSessionsController < ApplicationController
-  def create
-    user = User.create()
-    room = Room.find(params[:room_id])
-    user_session = UserSession.create(room: room, user: user)
-    session[:user_session_id] = user_session.id
+  def create()
+    puts 'creating'
+    @user = User.create(username: 'bob')
+    @user_session = UserSession.create(user: @user, room_id: params[:room_id])
+    render :json => {session_id: @user_session.id}
   end
 end

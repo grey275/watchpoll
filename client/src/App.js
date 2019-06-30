@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 
 import { API_WS_ROOT } from './constants';
 import Room from './Room';

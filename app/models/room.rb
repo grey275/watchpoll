@@ -4,6 +4,15 @@ class Room < ApplicationRecord
   has_one :candidate_video
   belongs_to :playlist
 
+  def cycle_video
+    if video_polls.count > 0
+      current_video_poll.select_winner
+      puts 'no polls!'
+    end
+    self.generate_video_poll
+    RoomsChannel.broadcast_state self
+  end
+
   def get_unplayed_videos
     played_videos  = self.video_polls
       .select {|video_poll| video_poll.played_video_id }
@@ -18,19 +27,23 @@ class Room < ApplicationRecord
   def generate_video_poll
     # randomly pull out 6 videos
     video_poll = VideoPoll.create(
-      room: self
+      room_id: id
     )
     unplayed_videos = get_unplayed_videos
 
+    puts ' '
+    puts 'chosen - '
     6.times.each do
       video_index = rand(unplayed_videos.length)
       video = unplayed_videos[video_index]
-      unplayed_videos.pop(video_index)
+      unplayed_videos.delete_at(video_index)
       CandidateVideo.create(
         video: video,
         video_poll: video_poll,
       )
+      puts video.title
     end
+    puts ' '
     video_poll
   end
 
@@ -39,6 +52,10 @@ class Room < ApplicationRecord
       video_id = self.video_polls.second_to_last.played_video_id
       video_id and Video.find(video_id)
     end
+  end
+
+  def current_video_poll
+    video_polls.last
   end
 
   def current_user_sessions
