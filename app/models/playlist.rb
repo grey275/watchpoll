@@ -1,4 +1,7 @@
 Yt.configuration.api_key = 'AIzaSyAQoqZ6oaSG5DP-zhSevbZRyorCIYiUgLs'
+Yt.configure do |config|
+  config.log_level = :debug
+end
 
 class Playlist < ApplicationRecord
   has_many :videos
@@ -6,7 +9,7 @@ class Playlist < ApplicationRecord
 
   def self.create(playlist_uid:)
     yt_playlist = Yt::Playlist.new(id: playlist_uid)
-
+    
     playlist = Playlist.new(
       playlist_uid: playlist_uid,
     )
