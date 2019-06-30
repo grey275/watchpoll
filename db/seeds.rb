@@ -19,7 +19,7 @@ Playlist.destroy_all
 
 
 playlist1 = Playlist.create(playlist_uid: 'PLtMJF5iI4w_R97IGHws4XbC1i55FBXY1e')
-playlist2 = Playlist.create( playlist_uid: 'PLtMJF5iI4w_RnTohhNAkQCgb0VNDXdsDV')
+playlist2 = Playlist.create( playlist_uid: 'PLH22-xSMERQqIUr0gtGBVI1FrARkF5fVc')
 
 # # # --------------------------
 
@@ -48,33 +48,3 @@ session1 = UserSession.create!(user: user1, room: room1, start: 1.days.ago, end:
 session2 = UserSession.create!(user: user2, room: room2, start: 1.days.ago, end: 0.days.ago)
 session3 = UserSession.create!(user: user1, room: room1, start: 1.days.ago)
 session4 = UserSession.create!(user: user1, room: room1, start: 1.days.ago)
-
-
-videopoll1 = room1.generate_video_poll
-ap videopoll1
-
-preference_order_list_1 = videopoll1.candidate_videos.map {|video| video.id}
-
-preference_order1 = PreferenceOrder.create_with_preference_order_list(
-  session1,
-  videopoll1,
-  preference_order_list_1,
-)
-
-preference_order2 = PreferenceOrder.create_with_preference_order_list(
-  session3,
-  videopoll1,
-  preference_order_list_1,
-)
-
-preference_order4 = PreferenceOrder.create_with_preference_order_list(
-  session4,
-  videopoll1,
-  preference_order_list_1,
-)
-
-preference_order4 = PreferenceOrder.create_with_preference_order_list(
-  session1,
-  videopoll1,
-  preference_order_list_1,
-)

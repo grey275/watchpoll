@@ -22,6 +22,7 @@ class RoomContainer extends React.Component {
   }
 
   getNewCandidateVideos = async (standings) => {
+    console.log('getting candidate videos')
     const video_uids = standings.map(standing => standing.video_uid);
     const video_items = await this.getVideoItems(video_uids);
     return _.zipWith(standings, video_items, (standing, item) => (
@@ -30,9 +31,11 @@ class RoomContainer extends React.Component {
   }
 
   handleRoomBroadcast = async ({ standings, poll_id }) => {
+    standings.video_id = standings.candidate_video_id
     console.log('standings: ', standings)
     console.log('poll_id: ', poll_id)
     if (this.state.poll_id !== poll_id) {
+      console.log('new poll!!!')
       this.setState({
         candidate_videos: await this.getNewCandidateVideos(standings),
         standings, poll_id

@@ -8,6 +8,6 @@ class Api::PreferenceOrdersController < ApplicationController
       params[:preference_order],
     )
     @room = Room.find params[:room_id]
-    RoomsChannel.broadcast_state @room
+    RoomsChannel.broadcast_state(@room)
   end
 end
