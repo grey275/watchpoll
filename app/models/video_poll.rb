@@ -54,9 +54,13 @@ class VideoPoll < ApplicationRecord
     puts "poll_id: #{id}"
     candidate_videos.map do |c_video|
       video_preferences = c_video.preferences
-      points = video_preferences.sum do |preference|
-        orda_count_formula(candidate_videos.length, preference.position)
-      end
+      points = video_preferences
+        .select do |preference|
+          active_session_preferences.include? preference
+        end
+        .sum do |preference|
+          orda_count_formula(candidate_videos.length, preference.position)
+        end
       video = c_video.video
       {video_id: video.id, candidate_video_id: c_video.id, video_uid: video.video_uid, points: points, title: video.title}
     end
