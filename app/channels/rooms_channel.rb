@@ -14,13 +14,7 @@ class RoomsChannel < ApplicationCable::Channel
     puts "id: #{room.id}"
     RoomsChannel.broadcast_to(
       room,
-      {
-        current_video_uid: room.current_video,
-        pool_playlist_uid: room.playlist.playlist_uid,
-        standings: room.current_video_poll.standings,
-        users: room.current_user_sessions,
-        poll_id: room.current_video_poll.id,
-      }
+      room.state
     )
   end
 
@@ -32,10 +26,6 @@ class RoomsChannel < ApplicationCable::Channel
     puts ''
     @user_session = UserSession.find(data['session_id'])
     RoomsChannel.broadcast_state(@room)
-    sleep(3)
-    puts 'done'
-    @room.cycle_video
-    # RoomsChannel.broadcast_state(@room)
   end
 
   def unsubscribed

@@ -32,9 +32,16 @@ class RoomContainer extends React.Component {
   }
 
   handleRoomBroadcast = async ({ standings, poll_id, current_video_state }) => {
-    standings.video_id = standings.candidate_video_id
     console.log('standings: ', standings)
     console.log('poll_id: ', poll_id)
+    console.log('video: ', current_video_state.video_uid)
+    standings = standings || []
+    if (!poll_id) {
+      this.setState({
+        current_video_state,
+      })
+      return
+    }
     if (this.state.poll_id !== poll_id) {
       console.log('new poll!!!')
       this.setState({
@@ -89,7 +96,13 @@ class RoomContainer extends React.Component {
   }
   render() {
     const { gapi, room_id } = this.props;
-    const { candidate_videos, standings, session_id, poll_id } = this.state;
+    const {
+      candidate_videos,
+      standings,
+      session_id,
+      poll_id,
+      current_video_state
+    } = this.state;
     const candidate_videos_with_points = _.zipWith(
       candidate_videos, standings,
       (video, standing) => ({
@@ -97,7 +110,10 @@ class RoomContainer extends React.Component {
     }))
     return (
       <section id="room">
-        <VideoPlayer gapi={gapi} />
+        <VideoPlayer
+          gapi={gapi}
+          {...current_video_state}
+        />
         <Poll
           candidate_videos_with_points={candidate_videos_with_points}
           onSortEnd={this.onSortEnd}

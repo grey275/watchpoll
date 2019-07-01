@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   namespace :api do # /api/data
-    resources :rooms, only: [:index, :show] do
+    resources :rooms, only: [:index] do
+      post :run
+      post :cycle
       resources :video_polls do
         resources :preference_orders, only: [:create]
       end
