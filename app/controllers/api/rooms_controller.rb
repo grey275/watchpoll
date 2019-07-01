@@ -1,7 +1,7 @@
 class Api::RoomsController < ApplicationController
   def index
     results = Room.all.map { |u| {
-      room_id: u.id, 
+      room_id: u.id,
       room_name: u.name,
       # playlist_id: u.playlist_id,
       playlist_uid: u.playlist.playlist_uid,
@@ -23,14 +23,7 @@ class Api::RoomsController < ApplicationController
   end
 
   def run
-    room = Room.find(params[:room_id])
-    Thread.new do
-      3.times do
-        sleep room.runtime
-        room.cycle_video
-      end
-    end
-    render :json => {new_video: room.current_video.title}
+    Room.find(params[:room_id]).run
   end
 
   def cycle

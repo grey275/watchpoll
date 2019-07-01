@@ -9,9 +9,10 @@ class Room < ApplicationRecord
   scope :most_recently_created, -> { by_created.last }
 
   def cycle_video
-    if video_polls.length > 1
-      video_polls[-1].select_winner
-      video_polls[-1].played_video.title
+    if video_polls.length >= 1
+      current_poll = Room.find(id).video_polls.last
+      puts 'WINNER: ' + current_poll.select_winner.title
+      current_poll.played_video.title
     else
     end
     puts "count before" + video_polls.count.to_s
@@ -68,11 +69,13 @@ class Room < ApplicationRecord
   end
 
   def current_video
-    if ( (video_polls.count > 0) &&
-      (video_polls.second_to_last != nil) &&
-      (video_polls.second_to_last.played_video != nil))
-      video_polls.second_to_last.played_video
+    last_poll = Room.find(id).video_polls.second_to_last
+    if ( (last_poll) &&
+      (last_poll.played_video))
+      puts "USINT LAST POLL TO GET VIDEO"
+      last_poll.played_video
     else
+      puts "CURRENT VIDEO IS FIRST"
       playlist.videos.first
    end
   end
@@ -108,10 +111,7 @@ class Room < ApplicationRecord
   def run
     Thread.new do
       3.times do
-        seconds_till_next_video = (next_video_time - Time.now)
-        if seconds_till_next_video >= 0
-          sleep seconds_till_next_video
-        end
+        sleep runtime
         cycle_video
       end
     end

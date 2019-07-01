@@ -25,10 +25,10 @@ playlist4 = Playlist.create(playlist_uid: 'PL86F4D497FD3CACCE')
 
 # # # --------------------------
 
-room1 = Room.create!(name: 'Room1', playlist: playlist1, runtime: 15)
-room2 = Room.create!(name: 'Room2', playlist: playlist2, runtime: 15)
-room3 = Room.create!(name: 'Room3', playlist: playlist3, runtime: 15)
-room4 = Room.create!(name: 'Room4', playlist: playlist4, runtime: 15)
+room1 = Room.create!(name: 'Room1', playlist: playlist1, runtime: 2)
+room2 = Room.create!(name: 'Room2', playlist: playlist2, runtime: 2)
+room3 = Room.create!(name: 'Room3', playlist: playlist3, runtime: 2)
+room4 = Room.create!(name: 'Room4', playlist: playlist4, runtime: 2)
 
 # # # --------------------------
 

@@ -5,6 +5,10 @@ class VideoPoll < ApplicationRecord
   has_many :candidate_videos
   alias_attribute :start_time, :created_at
 
+  scope :by_created, -> { order(created_at: :asc) }
+  scope :earliest_created, -> { by_created.first }
+  scope :most_recently_created, -> { by_created.last }
+
   def end_time
     start_time + room.runtime
   end
@@ -45,7 +49,6 @@ class VideoPoll < ApplicationRecord
     # if played_video == nil
     #   throw 'played_video is nil!'
     # end
-    puts 'we good'
     played_video
   end
 
