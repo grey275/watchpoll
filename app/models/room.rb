@@ -8,6 +8,10 @@ class Room < ApplicationRecord
   scope :earliest_created, -> { by_created.first }
   scope :most_recently_created, -> { by_created.last }
 
+  def last_playlist_completion_time
+    Room.find(id)[:last_playlist_completion_time] || created_at
+  end
+
   def cycle_video
     if video_polls.length >= 1
       current_poll = Room.find(id).video_polls.last
@@ -35,14 +39,17 @@ class Room < ApplicationRecord
 
   def played_videos
     Room.find(id).video_polls
-      .select {|video_poll| video_poll.played_video_id}
+      .select do |video_poll|
+        video_poll.played_video_id &&
+        (video_poll.created_at > last_playlist_completion_time)
+      end
       .map do |video_poll|
         Video.find(video_poll.played_video_id)
       end
   end
 
-  def get_unplayed_videos
-    self.playlist.videos.select do |video|
+  def unplayed_videos
+    Room.find(id).playlist.videos.select do |video|
       !played_videos.include? video
     end
   end
@@ -52,19 +59,25 @@ class Room < ApplicationRecord
     video_poll = VideoPoll.create(
       room_id: id
     )
-    unplayed_videos = get_unplayed_videos
-
     puts ' '
     puts 'chosen'
     ap unplayed_videos
-    [unplayed_videos.length, 6].min.times.each do
-      video_index = rand(unplayed_videos.length)
+    unless unplayed_videos.length >= 6
+      update(last_playlist_completion_time: Time.now)
+    end
+    unchosen_videos = unplayed_videos
+    6.times.each do
+      video_index = rand(unchosen_videos.length)
       video = unplayed_videos[video_index]
-      unplayed_videos.delete_at(video_index)
-      CandidateVideo.create(
+      byebug if !video
+      unchosen_videos.delete_at(video_index)
+      c_video = CandidateVideo.create(
         video: video,
         video_poll: video_poll,
       )
+      if !c_video
+        byebug
+      end
       puts video.title
     end
     puts ' '
@@ -113,7 +126,7 @@ class Room < ApplicationRecord
 
   def run
     Thread.new do
-      3.times do
+      while true
         cycle_video
         sleep runtime
       end
