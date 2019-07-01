@@ -6,7 +6,7 @@ import VideoPlayer from './VideoPlayer';
 import Poll from './Poll'
 import Axios from 'axios';
 
-import { DOMAIN_NAME, API_ROUTE, SOCKET_ROUTE, ROOM_ID } from './constants';
+import { DOMAIN_NAME, API_ROUTE, SOCKET_ROUTE } from './constants';
 
 class RoomContainer extends React.Component {
   constructor(props) {
@@ -14,7 +14,8 @@ class RoomContainer extends React.Component {
     this.state = {
       standings: [],
       candidate_videos: [],
-      current_video: null,
+      current_video_state: null,
+      video_end_time: null,
       preference_order_mapping: [],
       session_id: null,
       poll_id: [],
@@ -26,19 +27,26 @@ class RoomContainer extends React.Component {
     const video_uids = standings.map(standing => standing.video_uid);
     const video_items = await this.getVideoItems(video_uids);
     return _.zipWith(standings, video_items, (standing, item) => (
-      { ...standing.video_id, ...item.snippet }
+      { ...standing, ...item.snippet }
     ));
   }
 
-  handleRoomBroadcast = async ({ standings, poll_id }) => {
-    standings.video_id = standings.candidate_video_id
+  handleRoomBroadcast = async ({ standings, poll_id, current_video_state }) => {
     console.log('standings: ', standings)
     console.log('poll_id: ', poll_id)
+    console.log('video: ', current_video_state.video_uid)
+    standings = standings || []
+    if (!poll_id) {
+      this.setState({
+        current_video_state,
+      })
+      return
+    }
     if (this.state.poll_id !== poll_id) {
       console.log('new poll!!!')
       this.setState({
         candidate_videos: await this.getNewCandidateVideos(standings),
-        standings, poll_id
+        standings, poll_id, current_video_state
       })
     } else {
       this.setState({standings});
@@ -46,19 +54,19 @@ class RoomContainer extends React.Component {
   }
 
   getSessionId = async () => {
-    const response = await Axios.post(`http://${DOMAIN_NAME}/${API_ROUTE}/rooms/${ROOM_ID}/user_sessions`);
+    const response = await Axios.post(`http://${DOMAIN_NAME}/${API_ROUTE}/rooms/${this.props.room_id}/user_sessions`);
     console.log('session id', response.data.session_id)
     return response.data.session_id
   }
 
   subscribeToChannels = async () => {
     const cable = ActionCable.createConsumer(`http://${DOMAIN_NAME}/${SOCKET_ROUTE}`)
-    console.log('room id: ', ROOM_ID);
+    console.log('room id: ', this.props.room_id);
     console.log(cable)
     global.cable = cable
     const rooms_channel = cable.subscriptions.create({
       channel: 'RoomsChannel',
-      room_id: ROOM_ID,
+      room_id: this.props.room_id,
     }, {
       connected: () => {
         rooms_channel.send({session_id: this.state.session_id});
@@ -87,8 +95,14 @@ class RoomContainer extends React.Component {
     this.broadcastSetup()
   }
   render() {
-    const { gapi } = this.props;
-    const { candidate_videos, standings, session_id, poll_id } = this.state;
+    const { gapi, room_id } = this.props;
+    const {
+      candidate_videos,
+      standings,
+      session_id,
+      poll_id,
+      current_video_state
+    } = this.state;
     const candidate_videos_with_points = _.zipWith(
       candidate_videos, standings,
       (video, standing) => ({
@@ -96,13 +110,17 @@ class RoomContainer extends React.Component {
     }))
     return (
       <section id="room">
-        <VideoPlayer gapi={gapi} />
+        <VideoPlayer
+          gapi={gapi}
+          {...current_video_state}
+        />
         <Poll
           candidate_videos_with_points={candidate_videos_with_points}
           onSortEnd={this.onSortEnd}
           standings={standings}
           session_id={session_id}
           poll_id={poll_id}
+          room_id={room_id}
         />
       </section>
     );

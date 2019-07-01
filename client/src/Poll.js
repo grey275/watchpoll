@@ -5,7 +5,7 @@ import arrayMove from 'array-move';
 
 import Candidate from './Candidate';
 import Axios from 'axios';
-import { DOMAIN_NAME, ROOM_ID, API_ROUTE } from './constants';
+import { DOMAIN_NAME, API_ROUTE } from './constants';
 
 
 const SortableItem = SortableElement(({value}) => value);
@@ -48,13 +48,13 @@ class Poll extends React.Component {
 
   submitPreferenceOrder = () => {
     const { preference_order } = this.state;
-    const { standings, poll_id, session_id } = this.props;
+    const { standings, poll_id, session_id, room_id } = this.props;
     const order =  preference_order.map(({origin_index}) => (
-      standings[origin_index].video_id
+      standings[origin_index].candidate_video_id
     ));
     console.log('order: ', order)
     Axios.post(
-      `http://${DOMAIN_NAME}/${API_ROUTE}/rooms/${ROOM_ID}/video_polls/${poll_id}/preference_orders`,
+      `http://${DOMAIN_NAME}/${API_ROUTE}/rooms/${room_id}/video_polls/${poll_id}/preference_orders`,
       {
         session_id,
         poll_id,
