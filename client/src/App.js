@@ -1,20 +1,28 @@
 import React, { Component } from 'react';
 
 import Nav from './Nav';
-import Main from './Main';
+import RoomIndex  from './RoomIndex';
+import About  from './About';
+import New  from './New';
+import { Switch, Route, Redirect } from 'react-router-dom'
 
 class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      message: 'Click the button to load data!'
-    }
-  }
   render() {
+    const { gapi } = this.props;
     return (
       <div id="app">
         <Nav/>
-        <Main gapi={this.props.gapi}/>
+        <Switch>
+          <Route exact path='/' render={() => (
+            <Redirect to="/rooms" />
+          )} />
+          <Route path='/about' component={About}/>
+          <Route path='/new' component={New}/>
+          <Route path='/rooms' render={() => (
+            <RoomIndex gapi={gapi} />
+          )}/>
+
+        </Switch>
       </div>
  );
   }

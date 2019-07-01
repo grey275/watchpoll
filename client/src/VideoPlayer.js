@@ -30,7 +30,6 @@ const VideoPlayer = ({start_time, runtime, video_uid}) =>  {
         videoId={video_uid}
         start={3}
         opts={opts}
-        onStateChange
       />
   );
 }
