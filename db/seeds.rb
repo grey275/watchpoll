@@ -18,7 +18,7 @@ Room.destroy_all
 Playlist.destroy_all
 
 
-playlist1 = Playlist.create(playlist_uid: 'PLtMJF5iI4w_R97IGHws4XbC1i55FBXY1e')
+playlist1 = Playlist.create(playlist_uid: 'PLH22-xSMERQqIUr0gtGBVI1FrARkF5fVc')
 playlist2 = Playlist.create(playlist_uid: 'PLtMJF5iI4w_RnTohhNAkQCgb0VNDXdsDV')
 playlist3 = Playlist.create(playlist_uid: 'PL4BrNFx1j7E5qDxSPIkeXgBqX0J7WaB2a')
 playlist4 = Playlist.create(playlist_uid: 'PL86F4D497FD3CACCE')

@@ -33,13 +33,15 @@ class Room < ApplicationRecord
     current_video_poll.end_time
   end
 
-  def get_unplayed_videos
-    played_videos  = self.video_polls
-      .select {|video_poll| video_poll.played_video_id }
+  def played_videos
+    Room.find(id).video_polls
+      .select {|video_poll| video_poll.played_video_id}
       .map do |video_poll|
         Video.find(video_poll.played_video_id)
       end
+  end
 
+  def get_unplayed_videos
     self.playlist.videos.select do |video|
       !played_videos.include? video
     end
@@ -54,7 +56,8 @@ class Room < ApplicationRecord
 
     puts ' '
     puts 'chosen'
-    6.times.each do
+    ap unplayed_videos
+    [unplayed_videos.length, 6].min.times.each do
       video_index = rand(unplayed_videos.length)
       video = unplayed_videos[video_index]
       unplayed_videos.delete_at(video_index)
@@ -111,8 +114,8 @@ class Room < ApplicationRecord
   def run
     Thread.new do
       3.times do
-        sleep runtime
         cycle_video
+        sleep runtime
       end
     end
     puts 'running!'
