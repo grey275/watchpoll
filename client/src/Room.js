@@ -34,7 +34,7 @@ class RoomContainer extends React.Component {
   handleRoomBroadcast = async ({ standings, poll_id, current_video_state }) => {
     console.log('standings: ', standings)
     console.log('poll_id: ', poll_id)
-    console.log('video: ', current_video_state.video_uid)
+    console.log('video: ', current_video_state.title)
     standings = standings || []
     if (!poll_id) {
       this.setState({

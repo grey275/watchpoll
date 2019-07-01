@@ -85,7 +85,7 @@ class Room < ApplicationRecord
   end
 
   def current_video_poll
-    video_polls.last
+    Room.find(id).video_polls.last
   end
 
   def state
