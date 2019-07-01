@@ -15,7 +15,7 @@ class Nav extends React.Component {
           as={Header}
         >
           {/* WatchPoll */}
-          <Link to='/'>WatchPoll</Link>
+          <Link to='/rooms'>WatchPoll</Link>
         </Menu.Item>
         <Menu.Menu
           position="right"
