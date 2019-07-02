@@ -6,13 +6,14 @@ import arrayMove from 'array-move';
 import Candidate from './Candidate';
 import Axios from 'axios';
 import { DOMAIN_NAME, API_ROUTE } from './constants';
+import { List } from 'semantic-ui-react';
 
 
 const SortableItem = SortableElement(({value}) => value);
 
 const SortableList = SortableContainer(({items}) => {
   return (
-    <ul>
+    <ul id="poll">
       {items.map((value, index) => (
         <SortableItem key={`item-${index}`} index={index} value={value} />
       ))}
@@ -91,7 +92,7 @@ class Poll extends React.Component {
   };
 
   render () {
-    const {candidate_videos_with_points } = this.props;
+    const { candidate_videos_with_points } = this.props;
 let items;
     if (candidate_videos_with_points) {
       const ordered = this.getOrderedCandidateVideos()

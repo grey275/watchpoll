@@ -13,7 +13,7 @@ class RoomContainer extends React.Component {
     super(props);
     this.state = {
       standings: [],
-      candidate_videos: [],
+      candidate_videos_with_points: [],
       current_video_state: null,
       video_end_time: null,
       preference_order_mapping: [],
@@ -33,26 +33,33 @@ class RoomContainer extends React.Component {
      });
   }
 
-  handleRoomBroadcast = async ({ standings, poll_id, current_video_state }) => {
+  handleRoomBroadcast = async ({ standings, poll_id, current_video_state, current_sessions, }) => {
     console.log('standings: ', standings)
     console.log('poll_id: ', poll_id)
     console.log('video: ', current_video_state.title)
     standings = standings || []
-    if (!poll_id) {
-      this.setState({
-        current_video_state,
-      })
-      return
+    let state_obj = {
+      standings,
+      current_sessions
     }
+
+    if (!poll_id) {
+      state_obj.current_video_state = current_video_state
+    }
+
     if (this.state.poll_id !== poll_id) {
       console.log('new poll!!!')
-      this.setState({
-        candidate_videos: await this.getNewCandidateVideos(standings),
-        standings, poll_id, current_video_state
-      })
-    } else {
-      this.setState({standings});
+      const candidate_videos = await this.getNewCandidateVideos(standings)
+      const candidate_videos_with_points = this.getCandidateVideosWithPoints(standings, candidate_videos);
+      console.log('with points', candidate_videos_with_points)
+      state_obj = {
+        ...state_obj,
+        candidate_videos_with_points,
+        poll_id, current_video_state
+      }
     }
+
+    this.setState(state_obj)
   }
 
   getSessionId = async () => {
@@ -96,22 +103,27 @@ class RoomContainer extends React.Component {
   componentDidMount() {
     this.broadcastSetup()
   }
+
+  getCandidateVideosWithPoints = (standings, candidate_videos) => (
+    _.zipWith(
+      candidate_videos, standings,
+      (snippet, standing) => {
+        console.log('snippet: ', snippet)
+        console.log('standing: ', standing)
+        return { ...standing, ...snippet }
+      }
+    )
+  )
+
   render() {
     const { gapi, room_id } = this.props;
     const {
-      candidate_videos,
+      candidate_videos_with_points,
       standings,
       session_id,
       poll_id,
       current_video_state
     } = this.state;
-    const candidate_videos_with_points = _.zipWith(
-      candidate_videos, standings,
-      (snippet, standing) => {
-        console.log('snippet', snippet)
-        return { ...standing, ...snippet }
-      }
-    )
     return (
       <section id="room">
         <VideoPlayer

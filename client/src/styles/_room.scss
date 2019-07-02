@@ -1,4 +1,7 @@
+$background: #f3f3f3;
+
 #room {
+  padding-top: .5em;
   width: 100%;
   height: calc(100vh - 50px);
   display: grid;
@@ -7,12 +10,14 @@
   grid-template-areas:
     "video poll"
     ". poll";
-  @media screen and (max-width: 768px) {
+  grid-gap: .5em;
+  @media screen and (max-width: 1400px) {
   grid-template-columns: auto;
   grid-template-areas:
     "video"
     "poll";
   }
+  background-color: $background;
 }
 
 #tabs {
@@ -47,6 +52,8 @@ iframe {
   width: 100%;
   height: 100%;
   overflow-y: scroll;
+  margin-block-start: 0px;
+  padding-inline-start: 0px;
   // display: flex;
 }
 
@@ -57,6 +64,9 @@ iframe {
     "thumbnail description icon-container";
 
   grid-template-columns: max-content auto auto;
+  padding: .25em;
+  background-color: white;
+  border: solid .25em $background;
 }
 
 .video-candidate__name {

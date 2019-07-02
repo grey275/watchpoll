@@ -111,7 +111,7 @@ class Room < ApplicationRecord
         },
         pool_playlist_uid: playlist.playlist_uid,
         standings: (current_video_poll and current_video_poll.standings),
-        users: current_user_sessions,
+        current_sessions: current_user_sessions,
         poll_id: (current_video_poll and current_video_poll.id),
       }
   end
