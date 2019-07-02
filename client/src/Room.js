@@ -3,6 +3,7 @@ import  ActionCable  from 'actioncable';
 import _ from 'lodash';
 
 import VideoPlayer from './VideoPlayer';
+import ControlPanel from './ControlPanel';
 import Poll from './Poll'
 import Axios from 'axios';
 
@@ -25,13 +26,13 @@ class RoomContainer extends React.Component {
   getStandingsWithSnippets = (video_standings, video_snippets) => {
     console.log('getting candidate videos')
     return _.zipWith(video_standings, video_snippets, (standing, snippet) => {
-      console.log('title: ', snippet.title)
+      console.log('title: ', snippet && snippet.title)
       console.log('points: ', standing.points)
       return { ...snippet, ...standing }
      });
   }
 
-  handleRoomBroadcast = async ({ standings, poll_id, current_video_state, current_sessions, }) => {
+  handleRoomBroadcast = async ({ standings, poll_id, current_video_state, num_of_users, }) => {
     console.log('standings: ', standings)
     console.log('poll_id: ', poll_id)
     console.log('video: ', current_video_state.title)
@@ -39,7 +40,7 @@ class RoomContainer extends React.Component {
 
     const to_set = {
       standings,
-      current_sessions,
+      num_of_users,
     };
 
     if ((poll_id && poll_id !== this.state.poll_id) || (this.state.snippets && this.state.snippets.length === 0)) {
@@ -115,12 +116,16 @@ class RoomContainer extends React.Component {
       standings,
       session_id,
       poll_id,
-      current_video_state
+      current_video_state,
+      num_of_users,
     } = this.state;
-
     const standings_with_snippets = standings.length > 0 && snippets.length > 0
       ? this.getStandingsWithSnippets(standings, snippets)
       : [];
+
+    const next_video_time =
+      current_video_state
+      && current_video_state.video_end_time;
 
     return (
       <section id="room">
@@ -135,6 +140,10 @@ class RoomContainer extends React.Component {
           session_id={session_id}
           poll_id={poll_id}
           room_id={room_id}
+        />
+        <ControlPanel
+          num_of_users={num_of_users}
+          next_video_time={next_video_time}
         />
       </section>
     );

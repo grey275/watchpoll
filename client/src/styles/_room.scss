@@ -1,21 +1,26 @@
 $background: #f3f3f3;
 
 #room {
-  padding-top: .5em;
+  padding: .5em;
   width: 100%;
   height: calc(100vh - 50px);
   display: grid;
   position: relative;
   grid-template-columns: 65%  auto;
+  grid-template-rows: min-content;
   grid-template-areas:
-    "video poll"
-    ". poll";
+    "control-panel control-panel"
+    "video poll";
   grid-gap: .5em;
   @media screen and (max-width: 1400px) {
-  grid-template-columns: auto;
-  grid-template-areas:
-    "video"
-    "poll";
+    grid-template-columns: auto;
+    grid-template-areas:
+      "control-panel"
+      "video"
+      "poll";
+    #poll {
+      overflow-y: visible;
+    }
   }
   background-color: $background;
 }
@@ -41,10 +46,11 @@ iframe {
 }
 
 
-#chat {
-  grid-area: chat;
-  display: flex;
-  flex-direction: column;
+#control-panel {
+  background-color: white;
+  grid-area: control-panel;
+  width: 100%;
+  height: 40px;
 }
 
 #poll {

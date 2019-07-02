@@ -2,6 +2,7 @@ import React from 'react';
 import { Placeholder } from 'semantic-ui-react';
 import YouTube from 'react-youtube';
 
+
 const timeFromString = (str) => (new Date(str).getTime());
 
 class VideoPlayer extends React.Component {
@@ -20,7 +21,7 @@ class VideoPlayer extends React.Component {
     this.setState({
       player_opts: {
         playerVars: {
-          autoplay: 1,
+          autoplay: 0,
           controls: 0,
           start: 0,
         }
@@ -42,11 +43,13 @@ class VideoPlayer extends React.Component {
   render() {
     const { player_opts } = this.state;
     return (
-      <YouTube
-        className="video-player"
-        videoId={this.props.video_uid}
-        opts={player_opts}
-      />
+      <React.Fragment>
+        <YouTube
+          className="video-player"
+          videoId={this.props.video_uid}
+          opts={player_opts}
+        />
+      </React.Fragment>
 
     )
   }
