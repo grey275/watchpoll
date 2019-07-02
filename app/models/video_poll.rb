@@ -63,6 +63,7 @@ class VideoPoll < ApplicationRecord
       end
       .flatten
     puts "poll_id: #{id}"
+    candidate_videos.each { |cv| ap cv.video }
     candidate_videos.map do |c_video|
       video_preferences = c_video.preferences
       points = video_preferences

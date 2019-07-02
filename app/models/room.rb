@@ -61,14 +61,13 @@ class Room < ApplicationRecord
     )
     puts ' '
     puts 'chosen'
-    ap unplayed_videos
     unless unplayed_videos.length >= 6
       update(last_playlist_completion_time: Time.now)
     end
     unchosen_videos = unplayed_videos
     6.times.each do
       video_index = rand(unchosen_videos.length)
-      video = unplayed_videos[video_index]
+      video = unchosen_videos[video_index]
       byebug if !video
       unchosen_videos.delete_at(video_index)
       c_video = CandidateVideo.create(
@@ -78,9 +77,7 @@ class Room < ApplicationRecord
       if !c_video
         byebug
       end
-      puts video.title
     end
-    puts ' '
     video_poll
   end
 

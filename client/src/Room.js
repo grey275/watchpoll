@@ -107,9 +107,11 @@ class RoomContainer extends React.Component {
     } = this.state;
     const candidate_videos_with_points = _.zipWith(
       candidate_videos, standings,
-      (video, standing) => ({
-      ...video ,...standing,
-    }))
+      (snippet, standing) => {
+        console.log('snippet', snippet)
+        return { ...standing, ...snippet }
+      }
+    )
     return (
       <section id="room">
         <VideoPlayer
