@@ -5,7 +5,7 @@ class Api::RoomsController < ApplicationController
       room_name: u.name,
       # playlist_id: u.playlist_id,
       playlist_uid: u.playlist.playlist_uid,
-      current_video_id: u.current_video
+      current_video_id: u.current_video_uid
       }
     }
     #puts "rooms #{results}"
@@ -36,7 +36,7 @@ class Api::RoomsController < ApplicationController
   def cycle
     room = Room.find(params[:room_id])
     room.cycle_video
-    # render :json => {chosen: room.video_polls.second_to_last.played_video.title}
+    #render :json => {chosen: room.video_polls.second_to_last.played_video.title}
   end
 
   def stop
