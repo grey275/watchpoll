@@ -25,7 +25,7 @@ class RoomIndex extends React.Component {
     super(props)
     this.state = { 
       rooms: [],
-      playlist: []
+      room_videos: []
     }
   }
   getRooms() {
@@ -38,15 +38,11 @@ class RoomIndex extends React.Component {
   }
   
   getRoomVideoDetail = async(current_video_ids) => {
-    //console.log('call to getRoomVideoDetail ');
     await this.props.gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest");
-    //const current_video_ids = this.state.rooms.map(room => room.current_video_id);
     const response = await this.props.gapi.client.youtube.videos.list({
       part: 'snippet',
       id: current_video_ids.join(),
     })
-    
-    
     console.log('items: ', response.result.items)
     return response.result.items.map(item => item.snippet);
   }
@@ -61,8 +57,10 @@ class RoomIndex extends React.Component {
       console.log("Testing curr video ",  current_video_ids.length);
       this.getRoomVideoDetail(current_video_ids)  
        .then(playlist_items => {
-         console.log(playlist_items)
-      //    this.setState({playlist:  response.data, })
+        console.log('Playlist_items: ', playlist_items)
+
+          this.setState({room_videos:  playlist_items.data, })
+           
       })
       this.setState({rooms: response.data, })
 
@@ -73,19 +71,10 @@ class RoomIndex extends React.Component {
   render(){
     const { rooms } = this.state;
     const { gapi } = this.props;
+    console.log('gapi: ', gapi);
 
-    // const current_video_ids = rooms.map(room => room.current_video_id);
-    // console.log(current_video_ids.length);
-    // const playlist_items = this.getRoomVideoDetail(current_video_ids);
-    
-
-    console.log('gapi: ', gapi)
     const room_links = rooms.map((room) => {
-      console.log('room: ', room);
-
-      // let hi = <getRoomVideoDetail video_id={room.current_video_id} />
-      // console.log('hi = ', hi);
-      
+    console.log('room: ', room);
       return(
         <React.Fragment>
         <Link
