@@ -18,17 +18,17 @@ Room.destroy_all
 Playlist.destroy_all
 
 
-playlist1 = Playlist.create(playlist_uid: 'PLtMJF5iI4w_R97IGHws4XbC1i55FBXY1e')
+playlist1 = Playlist.create(playlist_uid: 'PLH22-xSMERQqIUr0gtGBVI1FrARkF5fVc')
 playlist2 = Playlist.create(playlist_uid: 'PLtMJF5iI4w_RnTohhNAkQCgb0VNDXdsDV')
 playlist3 = Playlist.create(playlist_uid: 'PL4BrNFx1j7E5qDxSPIkeXgBqX0J7WaB2a')
 playlist4 = Playlist.create(playlist_uid: 'PL86F4D497FD3CACCE')
 
 # # # --------------------------
 
-room1 = Room.create!(name: 'Room1', playlist: playlist1, runtime: 15)
-room2 = Room.create!(name: 'Room2', playlist: playlist2, runtime: 15)
-room3 = Room.create!(name: 'Room3', playlist: playlist3, runtime: 15)
-room4 = Room.create!(name: 'Room4', playlist: playlist4, runtime: 15)
+room1 = Room.create!(name: 'Room1', playlist: playlist1, runtime: 2)
+room2 = Room.create!(name: 'Room2', playlist: playlist2, runtime: 2)
+room3 = Room.create!(name: 'Room3', playlist: playlist3, runtime: 2)
+room4 = Room.create!(name: 'Room4', playlist: playlist4, runtime: 2)
 
 # # # --------------------------
 

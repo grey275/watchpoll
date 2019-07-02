@@ -26,15 +26,17 @@ class RoomContainer extends React.Component {
     console.log('getting candidate videos')
     const video_uids = standings.map(standing => standing.video_uid);
     const video_items = await this.getVideoItems(video_uids);
-    return _.zipWith(standings, video_items, (standing, item) => (
-      { ...standing, ...item.snippet }
-    ));
+    console.log(video_items)
+    return _.zipWith(standings, video_items, (standing, item) => {
+      console.log('title: ', item.snippet.title)
+      return { ...standing, ...item.snippet }
+     });
   }
 
   handleRoomBroadcast = async ({ standings, poll_id, current_video_state }) => {
     console.log('standings: ', standings)
     console.log('poll_id: ', poll_id)
-    console.log('video: ', current_video_state.video_uid)
+    console.log('video: ', current_video_state.title)
     standings = standings || []
     if (!poll_id) {
       this.setState({
@@ -70,10 +72,10 @@ class RoomContainer extends React.Component {
     }, {
       connected: () => {
         rooms_channel.send({session_id: this.state.session_id});
+        console.log('subbed!')
        },
       received: this.handleRoomBroadcast,
     })
-    console.log('subbed!')
   }
 
   getVideoItems = async (video_uids) => {
@@ -105,9 +107,11 @@ class RoomContainer extends React.Component {
     } = this.state;
     const candidate_videos_with_points = _.zipWith(
       candidate_videos, standings,
-      (video, standing) => ({
-      ...video ,...standing,
-    }))
+      (snippet, standing) => {
+        console.log('snippet', snippet)
+        return { ...standing, ...snippet }
+      }
+    )
     return (
       <section id="room">
         <VideoPlayer
@@ -127,6 +131,5 @@ class RoomContainer extends React.Component {
   }
 
 }
-
 
 export default RoomContainer;

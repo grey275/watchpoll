@@ -12,9 +12,9 @@ Rails.application.routes.draw do
     end
   end
 
-  # get '*path', to: "static_pages#fallback_index_html", constraints: ->(request) do
-  #   !request.xhr? && request.format.html?
-  # end
+  get '*path', to: "static_pages#fallback_index_html", constraints: ->(request) do
+    !request.xhr? && request.format.html?
+  end
 
   mount ActionCable.server => '/cable'
 
