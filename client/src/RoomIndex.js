@@ -3,7 +3,7 @@ import Axios from 'axios'
 import { Link, Switch, Route, } from 'react-router-dom';
 
 import Room from './Room'
-// import { API_ROUTE } from 'constants';
+import { API_ROUTE, DOMAIN_NAME } from './constants';
 
 
 const RoomCard = ({room}) => {
@@ -26,7 +26,7 @@ class RoomIndex extends React.Component {
     this.state = { rooms: []}
   }
   getRooms() {
-    Axios.get('/api/rooms')
+    Axios.get(`http://${DOMAIN_NAME}/${API_ROUTE}/rooms`)
     .then(response => {
       this.setState({rooms: response.data})
     })

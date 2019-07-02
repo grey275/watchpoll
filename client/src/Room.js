@@ -42,7 +42,7 @@ class RoomContainer extends React.Component {
       current_sessions,
     };
 
-    if ((poll_id && poll_id !== this.state.poll_id) || (this.state.snippets.length === 0)) {
+    if ((poll_id && poll_id !== this.state.poll_id) || (this.state.snippets &&this.state.snippets.length === 0)) {
       console.log('setting snippets');
       to_set.snippets = await this.getVideoSnippets(standings);
       to_set.poll_id = poll_id;

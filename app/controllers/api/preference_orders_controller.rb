@@ -7,6 +7,7 @@ class Api::PreferenceOrdersController < ApplicationController
       @video_poll,
       params[:preference_order],
     )
+    p_order.reload
     @room = Room.find params[:room_id]
     RoomsChannel.broadcast_state(@room)
   end

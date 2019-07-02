@@ -32,5 +32,6 @@ class RoomsChannel < ApplicationCable::Channel
     # Any cleanup needed when channel is unsubscribed
     puts 'unsubscribed!'
     @user_session.update(end: Time.now)
+    @user_session.reload
   end
 end

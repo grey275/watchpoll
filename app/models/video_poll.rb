@@ -10,6 +10,8 @@ class VideoPoll < ApplicationRecord
   scope :most_recently_created, -> { by_created.last }
 
   def end_time
+    puts "start time #{start_time}"
+    puts "runtime #{room.runtime}"
     start_time + room.runtime
   end
 
@@ -43,13 +45,8 @@ class VideoPoll < ApplicationRecord
           .sort_by { |video| -video[:points] }
           .first[:video_id]
     )
-    # update(played_video_id: Video.last.id)
-    # puts
-    # puts "WINNER --- " + played_video.title
-    # if played_video == nil
-    #   throw 'played_video is nil!'
-    # end
-    played_video
+    reload
+    VideoPoll.find(id).played_video
   end
 
   def standings

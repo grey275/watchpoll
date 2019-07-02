@@ -56,13 +56,14 @@ class Room < ApplicationRecord
 
   def generate_video_poll
     # randomly pull out 6 videos
-    video_poll = VideoPoll.create(
+    video_poll = VideoPoll.new(
       room_id: id
     )
     puts ' '
     puts 'chosen'
     unless unplayed_videos.length >= 6
       update(last_playlist_completion_time: Time.now)
+      reload
     end
     unchosen_videos = unplayed_videos
     6.times.each do
@@ -74,10 +75,13 @@ class Room < ApplicationRecord
         video: video,
         video_poll: video_poll,
       )
+      c_video.reload
       if !c_video
         byebug
       end
     end
+    video_poll.save
+    video_poll.reload
     video_poll
   end
 
@@ -123,7 +127,8 @@ class Room < ApplicationRecord
 
   def run
     Thread.new do
-      while true
+      # while true
+      100.times do
         cycle_video
         sleep runtime
       end

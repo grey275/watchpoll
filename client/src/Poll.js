@@ -96,7 +96,8 @@ class Poll extends React.Component {
 
   render () {
     const { standings_with_snippets } = this.props;
-let items;
+    let items;
+    console.log('s with s', standings_with_snippets);
     if (standings_with_snippets) {
       const ordered = this.getOrderedCandidateVideos()
       console.log('ordered: ', ordered)

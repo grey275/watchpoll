@@ -1,11 +1,22 @@
 class Api::RoomsController < ApplicationController
+  def create
+    playlist = Playlist.create(playlist_uid: params[:playlist_uid])
+    room = Room.create(
+      playlist: playlist,
+      name: params[:name],
+      runtime: params[:runtime],
+    )
+    room.reload
+    room.run
+  end
+
   def index
     results = Room.all.map { |u| {
       room_id: u.id,
       room_name: u.name,
       # playlist_id: u.playlist_id,
       playlist_uid: u.playlist.playlist_uid,
-      current_video_id: u.current_video
+      current_video_uid: u.current_video
       }
     }
     #puts "rooms #{results}"
