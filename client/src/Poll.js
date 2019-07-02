@@ -38,7 +38,8 @@ class Poll extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      preference_order: null,
+      preference_order: [],
+      current_poll_id: null,
     }
   }
 
@@ -65,20 +66,22 @@ class Poll extends React.Component {
   }
 
   getOrderedCandidateVideos() {
-    const { candidate_videos_with_points } = this.props;
+    const { standings_with_snippets } = this.props;
     const { preference_order } = this.state
-    if (preference_order && candidate_videos_with_points ) {
-      return preference_order.map(preference => candidate_videos_with_points[preference.origin_index])
+    if (preference_order && standings_with_snippets ) {
+      return preference_order.map(preference => standings_with_snippets[preference.origin_index])
     }
     return []
   }
 
-  componentDidUpdate(_, {preference_order}) {
-    const { candidate_videos_with_points } = this.props;
-    if (preference_order === null && (candidate_videos_with_points.length > 0)) {
-      const length = candidate_videos_with_points.length;
-      this.setState({preference_order: this.initPreferenceOrder(length)})
-      return
+  componentDidUpdate() {
+    const { standings_with_snippets, poll_id } = this.props;
+    const { current_poll_id } = this.state;
+    console.log('current: ', current_poll_id)
+    console.log('new: ', poll_id);
+    if (poll_id !== current_poll_id) {
+      const length = standings_with_snippets.length;
+      this.setState({preference_order: this.initPreferenceOrder(length), current_poll_id: poll_id})
     }
   }
 
@@ -92,17 +95,17 @@ class Poll extends React.Component {
   };
 
   render () {
-    const { candidate_videos_with_points } = this.props;
+    const { standings_with_snippets } = this.props;
 let items;
-    if (candidate_videos_with_points) {
+    if (standings_with_snippets) {
       const ordered = this.getOrderedCandidateVideos()
+      console.log('ordered: ', ordered)
       items = ordered.map((video_data, index) => (
         <SortableCandidate video_data={video_data} index={index} />
       ));
     } else {
       items = [];
     }
-
     return (
       <SortableList
         items={items}

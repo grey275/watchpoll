@@ -53,9 +53,12 @@ class VideoPoll < ApplicationRecord
   end
 
   def standings
-    active_user_sessions = room.user_sessions.where(end: nil)
+    active_user_sessions = Room.find(room.id).user_sessions.where(end: nil)
     active_session_preferences = active_user_sessions
       .select do |user_session|
+        puts 'first test'
+        puts user_session.preference_orders.length > 0
+        ap user_session
         user_session.preference_orders.length > 0
       end
       .map do |user_session|

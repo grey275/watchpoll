@@ -13,23 +13,21 @@ class RoomContainer extends React.Component {
     super(props);
     this.state = {
       standings: [],
-      candidate_videos_with_points: [],
       current_video_state: null,
       video_end_time: null,
+      poll_video_snippets: [],
       preference_order_mapping: [],
       session_id: null,
-      poll_id: [],
+      poll_id: null,
     };
   }
 
-  getNewCandidateVideos = async (standings) => {
+  getStandingsWithSnippets = (video_standings, video_snippets) => {
     console.log('getting candidate videos')
-    const video_uids = standings.map(standing => standing.video_uid);
-    const video_items = await this.getVideoItems(video_uids);
-    console.log(video_items)
-    return _.zipWith(standings, video_items, (standing, item) => {
-      console.log('title: ', item.snippet.title)
-      return { ...standing, ...item.snippet }
+    return _.zipWith(video_standings, video_snippets, (standing, snippet) => {
+      console.log('title: ', snippet.title)
+      console.log('points: ', standing.points)
+      return { ...snippet, ...standing }
      });
   }
 
@@ -38,28 +36,22 @@ class RoomContainer extends React.Component {
     console.log('poll_id: ', poll_id)
     console.log('video: ', current_video_state.title)
     standings = standings || []
-    let state_obj = {
+
+    const to_set = {
       standings,
-      current_sessions
+      current_sessions,
+    };
+
+    if ((poll_id && poll_id !== this.state.poll_id) || (this.state.snippets.length === 0)) {
+      console.log('setting snippets');
+      to_set.snippets = await this.getVideoSnippets(standings);
+      to_set.poll_id = poll_id;
+      to_set.current_video_state = current_video_state
+      console.log('snippets: ', to_set.snippets);
     }
 
-    if (!poll_id) {
-      state_obj.current_video_state = current_video_state
-    }
-
-    if (this.state.poll_id !== poll_id) {
-      console.log('new poll!!!')
-      const candidate_videos = await this.getNewCandidateVideos(standings)
-      const candidate_videos_with_points = this.getCandidateVideosWithPoints(standings, candidate_videos);
-      console.log('with points', candidate_videos_with_points)
-      state_obj = {
-        ...state_obj,
-        candidate_videos_with_points,
-        poll_id, current_video_state
-      }
-    }
-
-    this.setState(state_obj)
+    console.log('setting state')
+    this.setState(to_set);
   }
 
   getSessionId = async () => {
@@ -85,14 +77,15 @@ class RoomContainer extends React.Component {
     })
   }
 
-  getVideoItems = async (video_uids) => {
+  getVideoSnippets = async (standings) => {
+    const video_uids = standings.map(standing => standing.video_uid);
     await this.props.gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest");
     const response = await this.props.gapi.client.youtube.videos.list({
       part: 'snippet',
       id: video_uids.join(),
     })
     console.log('items: ', response.result.items)
-    return response.result.items;
+    return response.result.items.map(item => item.snippet)
   }
 
   broadcastSetup = async () => {
@@ -110,7 +103,7 @@ class RoomContainer extends React.Component {
       (snippet, standing) => {
         console.log('snippet: ', snippet)
         console.log('standing: ', standing)
-        return { ...standing, ...snippet }
+        return { ...snippet, ...standing,  }
       }
     )
   )
@@ -118,12 +111,17 @@ class RoomContainer extends React.Component {
   render() {
     const { gapi, room_id } = this.props;
     const {
-      candidate_videos_with_points,
+      snippets,
       standings,
       session_id,
       poll_id,
       current_video_state
     } = this.state;
+
+    const standings_with_snippets = standings.length > 0 && snippets.length > 0
+      ? this.getStandingsWithSnippets(standings, snippets)
+      : [];
+
     return (
       <section id="room">
         <VideoPlayer
@@ -131,7 +129,7 @@ class RoomContainer extends React.Component {
           {...current_video_state}
         />
         <Poll
-          candidate_videos_with_points={candidate_videos_with_points}
+          standings_with_snippets={standings_with_snippets}
           onSortEnd={this.onSortEnd}
           standings={standings}
           session_id={session_id}
