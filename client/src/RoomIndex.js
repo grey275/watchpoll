@@ -1,87 +1,80 @@
 import React from 'react'
 import Axios from 'axios'
+import _ from 'lodash';
 import { Link, Switch, Route, } from 'react-router-dom';
+import { Placeholder } from 'semantic-ui-react';
 
-import Room from './Room'
+
 import { API_ROUTE, DOMAIN_NAME } from './constants';
-
-
-const RoomCard = ({room}) => {
-  return (
-    <React.Fragment>
-      <Link
-        to={`/rooms/${room.room_id}`}
-      >
-        {room.room_name}
-      </Link>
-        <p>Playlist: {room.playlist_uid}</p>
-    </React.Fragment>
-  )
-}
+import Room from './Room'
+import RoomCard from './RoomCard';
 
 
 class RoomIndex extends React.Component {
   constructor(props){
     super(props)
-    this.state = { rooms: []}
+    this.state = {
+      card_data: [],
+    }
   }
-  getRooms() {
-    Axios.get(`http://${DOMAIN_NAME}/${API_ROUTE}/rooms`)
-    .then(response => {
-      this.setState({rooms: response.data})
+
+  getRooms = async () => (
+    (await Axios.get(`http://${DOMAIN_NAME}/${API_ROUTE}/rooms`)).data
+  )
+
+  getCurrentVideoThumbnails = async (current_video_uids) => {
+    await this.props.gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest");
+    const response = await this.props.gapi.client.youtube.videos.list({
+      part: 'snippet',
+      id: current_video_uids.join(),
     })
-    .catch(error => console.log(error))
+    console.log(response)
+    return response.result.items.map(item => item.snippet.thumbnails.medium)
+  }
+
+  getCardData = async () => {
+    const { gapi } = this.props;
+    const rooms = await this.getRooms();
+    console.log('rooms: ', rooms)
+    const current_video_uids = rooms.map(room => room.current_video_uid);
+    const thumbnails = await this.getCurrentVideoThumbnails(current_video_uids);
+    console.log('thumbnails, ', thumbnails)
+    return (_.zipWith(
+      rooms, thumbnails,
+      ({playlist_title, room_id, room_name}, thumbnail) => ({
+        playlist_title, room_id, room_name, thumbnail,
+    }))
+    )
   }
 
   componentDidMount(){
-    this.getRooms()
+    console.log('mounted')
+    this.getCardData()
+      .then(card_data => {
+        this.setState({card_data})
+      })
   }
 
-  render(){
-    const { rooms } = this.state;
-    const { gapi } = this.props;
-    console.log('gapi: ', gapi)
-    const room_links = rooms.map((room) => {
-      console.log('room: ', room)
-      return(
-        <Link
-          to={`/rooms/${room.room_id}`}
-          key={room.room_id}
-        >
-          room link
-        </Link>
-      )
-  })
-    console.log('components', room_links)
-    return(
-      <div>
-        <section className="roomWrapper">
-          <Switch>
-            <Route
-              exact
-              path={'/rooms'}
-            >
-              {room_links}
-            </Route>
-            <Route
-              path="/rooms/:room_id"
-              render={({match}) => {
-                console.log('match: ', match);
-                return (
-                  <Room
-                    room_id={match.params.room_id}
-                    gapi={gapi}
-                  >
-                  </Room>
-                )
-              }}
-            >
-            </Route>
-          </Switch>
-        </section>
-      </div>
-        )
-      }
-    }
+  build_cards = card_data => (
+    card_data.map(data => (
+      <RoomCard {...data} key={data.room_id} />
+    ))
+  )
 
-    export default RoomIndex
+  render(){
+    const { card_data } = this.state;
+    console.log('data at render', card_data);
+    const cards = card_data
+      ? this.build_cards(card_data)
+      : <Placeholder />
+
+    return(
+      <section id="room-cards">
+        {cards}
+      </section>
+    )
+  }
+
+}
+
+export default RoomIndex

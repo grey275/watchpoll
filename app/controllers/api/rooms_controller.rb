@@ -4,23 +4,23 @@ class Api::RoomsController < ApplicationController
     room = Room.create(
       playlist: playlist,
       name: params[:name],
-      runtime: params[:runtime],
+      runtime: params[:runtime]
     )
     room.reload
     room.run
   end
 
   def index
-    results = Room.all.map { |u| {
-      room_id: u.id,
-      room_name: u.name,
-      # playlist_id: u.playlist_id,
-      playlist_uid: u.playlist.playlist_uid,
-      current_video_uid: u.current_video
+    room_data = Room.all.map do |room|
+      {
+        room_id: room.id,
+        room_name: room.name,
+        playlist_title: room.playlist.title,
+        playlist_uid: room.playlist.playlist_uid,
+        current_video_uid: room.current_video_uid
       }
-    }
-    #puts "rooms #{results}"
-    render :json => results
+    end
+    render :json => room_data
   end
 
   def show
@@ -40,13 +40,6 @@ class Api::RoomsController < ApplicationController
   def cycle
     room = Room.find(params[:room_id])
     room.cycle_video
-    # render :json => {chosen: room.video_polls.second_to_last.played_video.title}
-  end
-
-  def stop
-  end
-
-  private
-  def get_room
+    #render :json => {chosen: room.video_polls.second_to_last.played_video.title}
   end
 end
