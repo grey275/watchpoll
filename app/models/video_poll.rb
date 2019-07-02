@@ -5,6 +5,10 @@ class VideoPoll < ApplicationRecord
   has_many :candidate_videos
   alias_attribute :start_time, :created_at
 
+  scope :by_created, -> { order(created_at: :asc) }
+  scope :earliest_created, -> { by_created.first }
+  scope :most_recently_created, -> { by_created.last }
+
   def end_time
     start_time + room.runtime
   end
@@ -45,14 +49,16 @@ class VideoPoll < ApplicationRecord
     # if played_video == nil
     #   throw 'played_video is nil!'
     # end
-    puts 'we good'
     played_video
   end
 
   def standings
-    active_user_sessions = room.user_sessions.where(end: nil)
+    active_user_sessions = Room.find(room.id).user_sessions.where(end: nil)
     active_session_preferences = active_user_sessions
       .select do |user_session|
+        puts 'first test'
+        puts user_session.preference_orders.length > 0
+        ap user_session
         user_session.preference_orders.length > 0
       end
       .map do |user_session|
@@ -60,6 +66,7 @@ class VideoPoll < ApplicationRecord
       end
       .flatten
     puts "poll_id: #{id}"
+    candidate_videos.each { |cv| ap cv.video }
     candidate_videos.map do |c_video|
       video_preferences = c_video.preferences
       points = video_preferences

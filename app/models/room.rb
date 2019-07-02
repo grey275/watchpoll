@@ -8,10 +8,15 @@ class Room < ApplicationRecord
   scope :earliest_created, -> { by_created.first }
   scope :most_recently_created, -> { by_created.last }
 
+  def last_playlist_completion_time
+    Room.find(id)[:last_playlist_completion_time] || created_at
+  end
+
   def cycle_video
-    if video_polls.length > 1
-      video_polls[-1].select_winner
-      video_polls[-1].played_video.title
+    if video_polls.length >= 1
+      current_poll = Room.find(id).video_polls.last
+      puts 'WINNER: ' + current_poll.select_winner.title
+      current_poll.played_video.title
     else
     end
     puts "count before" + video_polls.count.to_s
@@ -32,14 +37,19 @@ class Room < ApplicationRecord
     current_video_poll.end_time
   end
 
-  def get_unplayed_videos
-    played_videos  = self.video_polls
-      .select {|video_poll| video_poll.played_video_id }
+  def played_videos
+    Room.find(id).video_polls
+      .select do |video_poll|
+        video_poll.played_video_id &&
+        (video_poll.created_at > last_playlist_completion_time)
+      end
       .map do |video_poll|
         Video.find(video_poll.played_video_id)
       end
+  end
 
-    self.playlist.videos.select do |video|
+  def unplayed_videos
+    Room.find(id).playlist.videos.select do |video|
       !played_videos.include? video
     end
   end
@@ -49,30 +59,36 @@ class Room < ApplicationRecord
     video_poll = VideoPoll.create(
       room_id: id
     )
-    unplayed_videos = get_unplayed_videos
-
     puts ' '
     puts 'chosen'
+    unless unplayed_videos.length >= 6
+      update(last_playlist_completion_time: Time.now)
+    end
+    unchosen_videos = unplayed_videos
     6.times.each do
-      video_index = rand(unplayed_videos.length)
-      video = unplayed_videos[video_index]
-      unplayed_videos.delete_at(video_index)
-      CandidateVideo.create(
+      video_index = rand(unchosen_videos.length)
+      video = unchosen_videos[video_index]
+      byebug if !video
+      unchosen_videos.delete_at(video_index)
+      c_video = CandidateVideo.create(
         video: video,
         video_poll: video_poll,
       )
-      puts video.title
+      if !c_video
+        byebug
+      end
     end
-    puts ' '
     video_poll
   end
 
   def current_video
-    if ( (video_polls.count > 0) &&
-      (video_polls.second_to_last != nil) &&
-      (video_polls.second_to_last.played_video != nil))
-      video_polls.second_to_last.played_video
+    last_poll = Room.find(id).video_polls.second_to_last
+    if ( (last_poll) &&
+      (last_poll.played_video))
+      puts "USINT LAST POLL TO GET VIDEO"
+      last_poll.played_video
     else
+      puts "CURRENT VIDEO IS FIRST"
       playlist.videos.first
    end
   end
@@ -82,7 +98,7 @@ class Room < ApplicationRecord
   end
 
   def current_video_poll
-    video_polls.last
+    Room.find(id).video_polls.last
   end
 
   def state
@@ -95,7 +111,7 @@ class Room < ApplicationRecord
         },
         pool_playlist_uid: playlist.playlist_uid,
         standings: (current_video_poll and current_video_poll.standings),
-        users: current_user_sessions,
+        current_sessions: current_user_sessions,
         poll_id: (current_video_poll and current_video_poll.id),
       }
   end
@@ -107,12 +123,9 @@ class Room < ApplicationRecord
 
   def run
     Thread.new do
-      3.times do
-        seconds_till_next_video = (next_video_time - Time.now)
-        if seconds_till_next_video >= 0
-          sleep seconds_till_next_video
-        end
+      while true
         cycle_video
+        sleep runtime
       end
     end
     puts 'running!'
