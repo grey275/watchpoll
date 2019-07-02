@@ -71,6 +71,7 @@ Rails.application.configure do
   config.log_formatter = ::Logger::Formatter.new
   config.active_record.logger = false
 
+  config.action_cable.allowed_request_origins = [/http:\/\/*/, /https:\/\/*/]
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
