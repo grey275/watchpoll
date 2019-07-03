@@ -16,22 +16,19 @@ class RoomContainer extends React.Component {
     this.state = {
       standings: [],
       current_video_state: null,
-      poll_video_snippets: [],
+      snippets: [],
       preference_order_mapping: [],
       session_id: null,
       poll_id: null,
       onSyncClick: null,
-      current_video_time: null,
     };
   }
 
   onPlay = (event) => {
-    const { current_video_time } = this.state;
-    const current_video_seconds = current_video_time / 1000
+    const { current_video_state } =  this.state;
+    const video_start_time = current_video_state.start_time;
+    const current_video_seconds = this.getCurrentVideoTime(video_start_time) / 1000
     console.log('event: ', event)
-    if (current_video_time === null) {
-      throw 'current_video_time not set'
-    }
     console.log('playing')
     this.setState({
       onSyncClick: () => {
@@ -58,11 +55,11 @@ class RoomContainer extends React.Component {
       standings,
       num_of_users,
       next_video_time: current_video_state.end_time,
-      current_video_time: this.getCurrentVideoTime(current_video_state.start_time),
     };
     console.log('current video time', to_set.current_video_time)
 
-    if ((poll_id && poll_id !== this.state.poll_id) || (this.state.snippets && this.state.snippets.length === 0)) {
+    if ((poll_id && poll_id !== this.state.poll_id) || (this.state.snippets.length === 0)) {
+      console.log('we gotta set stuff')
       to_set.snippets = await this.getVideoSnippets(standings);
       to_set.poll_id = poll_id;
       to_set.current_video_state = current_video_state
@@ -138,7 +135,7 @@ class RoomContainer extends React.Component {
       <section id="room">
         <VideoPlayer
           gapi={gapi}
-          onPlay={this.onPlay}
+          onPlay={current_video_state && this.onPlay}
           {...current_video_state}
         />
         <Poll
