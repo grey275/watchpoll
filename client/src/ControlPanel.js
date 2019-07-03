@@ -1,15 +1,37 @@
 import React from 'react';
+import CountDown from 'react-countdown-now';
 import { Statistic, Button } from 'semantic-ui-react';
 
 
 const timeFromString = (str) => (new Date(str).getTime());
 
 const getSecondsTillNextVideo = (next_video_time) => (
-    Math.round((new Date().getTime() - timeFromString(next_video_time)) / 1000)
+    Math.round((timeFromString(next_video_time) - new Date().getTime()) / 1000)
 )
 
 
-const Stats = ({num_of_users, seconds_till_next_video}) => (
+const CountdownRenderer = ({ hours, minutes, seconds, completed }) => {
+  const minutes_display = minutes
+    ? <React.Fragment>{minutes}<small>m</small></React.Fragment>
+    : ''
+
+  const seconds_display = <React.Fragment>{seconds}<small>s</small></React.Fragment>
+  if (completed) {
+    // Render a completed state
+    return 'switching...'
+
+  } else {
+    // Render a countdown
+    return (
+      <Statistic>
+        <Statistic.Value>{minutes_display}{seconds_display}</Statistic.Value>;
+        <Statistic.Label> Next Video </Statistic.Label>
+      </Statistic>
+    )
+  }
+};
+
+const Stats = ({num_of_users, next_video_time}) => (
   <Statistic.Group size="mini" className="stats">
     <Statistic>
       <Statistic.Value>
@@ -19,33 +41,33 @@ const Stats = ({num_of_users, seconds_till_next_video}) => (
         Viewers
       </Statistic.Label>
     </Statistic>
-    <Statistic>
-      <Statistic.Value>
-        {seconds_till_next_video || 0}<small>s</small>
-      </Statistic.Value>
-      <Statistic.Label>
-        Next Video
-      </Statistic.Label>
-    </Statistic>
+    <CountDown
+      date={new Date(next_video_time).getTime()}
+      renderer={CountdownRenderer}
+      // onComplete={onNextVideo}
+    />
   </Statistic.Group>
 )
 
 
 class ControlPanel extends React.Component {
+  onNextVideo = () => {
+    this.forceUpdate()
+  }
 
   render () {
-    const {next_video_time, num_of_users} = this.props;
-    const stats = {
-      num_of_users,
-      seconds_till_next_video: getSecondsTillNextVideo(next_video_time),
-    }
-
+    const {next_video_time, num_of_users, onSyncClick} = this.props;
+    console.log('seconds', )
+    console.log(timeFromString(next_video_time))
     return (
       <section
         id='control-panel'
       >
-        <Stats {...stats} />
-        <Button>Live</Button>
+        <Stats
+          next_video_time={next_video_time}
+          num_of_users={num_of_users}
+        />
+        <Button onClick={onSyncClick} >Sync</Button>
       </section>
     )
   }

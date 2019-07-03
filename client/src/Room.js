@@ -9,6 +9,7 @@ import Axios from 'axios';
 
 import { DOMAIN_NAME, API_ROUTE, SOCKET_ROUTE } from './constants';
 
+const timeFromString = (str) => (new Date(str).getTime());
 class RoomContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -19,52 +20,64 @@ class RoomContainer extends React.Component {
       preference_order_mapping: [],
       session_id: null,
       poll_id: null,
+      onSyncClick: null,
+      current_video_time: null,
     };
   }
 
+  onPlay = (event) => {
+    const { current_video_time } = this.state;
+    const current_video_seconds = current_video_time / 1000
+    console.log('event: ', event)
+    if (current_video_time === null) {
+      throw 'current_video_time not set'
+    }
+    console.log('playing')
+    this.setState({
+      onSyncClick: () => {
+        event.target.seekTo(current_video_seconds);
+      }
+    })
+  }
+
+
   getStandingsWithSnippets = (video_standings, video_snippets) => {
-    console.log('getting candidate videos')
     return _.zipWith(video_standings, video_snippets, (standing, snippet) => {
-      console.log('title: ', snippet && snippet.title)
-      console.log('points: ', standing.points)
       return { ...snippet, ...standing }
      });
   }
 
+  getCurrentVideoTime = (start_time) => (
+    (new Date().getTime() - new Date(start_time).getTime())
+  )
+
   handleRoomBroadcast = async ({ standings, poll_id, current_video_state, num_of_users, }) => {
-    console.log('standings: ', standings)
-    console.log('poll_id: ', poll_id)
-    console.log('video: ', current_video_state.title)
     standings = standings || []
 
     const to_set = {
       standings,
       num_of_users,
       next_video_time: current_video_state.end_time,
+      current_video_time: this.getCurrentVideoTime(current_video_state.start_time),
     };
+    console.log('current video time', to_set.current_video_time)
 
     if ((poll_id && poll_id !== this.state.poll_id) || (this.state.snippets && this.state.snippets.length === 0)) {
-      console.log('setting snippets');
       to_set.snippets = await this.getVideoSnippets(standings);
       to_set.poll_id = poll_id;
       to_set.current_video_state = current_video_state
-      console.log('snippets: ', to_set.snippets);
     }
 
-    console.log('setting state')
     this.setState(to_set);
   }
 
   getSessionId = async () => {
     const response = await Axios.post(`http://${DOMAIN_NAME}/${API_ROUTE}/rooms/${this.props.room_id}/user_sessions`);
-    console.log('session id', response.data.session_id)
     return response.data.session_id
   }
 
   subscribeToChannels = async () => {
     const cable = ActionCable.createConsumer(`http://${DOMAIN_NAME}/${SOCKET_ROUTE}`)
-    console.log('room id: ', this.props.room_id);
-    console.log(cable)
     global.cable = cable
     const rooms_channel = cable.subscriptions.create({
       channel: 'RoomsChannel',
@@ -72,7 +85,6 @@ class RoomContainer extends React.Component {
     }, {
       connected: () => {
         rooms_channel.send({session_id: this.state.session_id});
-        console.log('subbed!')
        },
       received: this.handleRoomBroadcast,
     })
@@ -85,7 +97,6 @@ class RoomContainer extends React.Component {
       part: 'snippet',
       id: video_uids.join(),
     })
-    console.log('items: ', response.result.items)
     return response.result.items.map(item => item.snippet)
   }
 
@@ -102,8 +113,6 @@ class RoomContainer extends React.Component {
     _.zipWith(
       candidate_videos, standings,
       (snippet, standing) => {
-        console.log('snippet: ', snippet)
-        console.log('standing: ', standing)
         return { ...snippet, ...standing,  }
       }
     )
@@ -119,16 +128,17 @@ class RoomContainer extends React.Component {
       current_video_state,
       num_of_users,
       next_video_time,
+      onSyncClick,
     } = this.state;
     const standings_with_snippets = standings.length > 0 && snippets.length > 0
       ? this.getStandingsWithSnippets(standings, snippets)
       : [];
 
-    console.log('next', next_video_time);
     return (
       <section id="room">
         <VideoPlayer
           gapi={gapi}
+          onPlay={this.onPlay}
           {...current_video_state}
         />
         <Poll
@@ -142,6 +152,7 @@ class RoomContainer extends React.Component {
         <ControlPanel
           num_of_users={num_of_users}
           next_video_time={next_video_time}
+          onSyncClick={onSyncClick}
         />
       </section>
     );
