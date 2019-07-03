@@ -46,6 +46,7 @@ iframe {
 }
 
 
+
 .ui.fluid.placeholder {
   position: absolute;
   top: 0px;
@@ -53,6 +54,21 @@ iframe {
   width: 100%;
   height: 100%;
 }
+
+#room-cards {
+  display: grid;
+  grid-auto-columns: max-content;
+  grid-gap: 2em;
+}
+
+#room-cards > a {
+  margin: 1em;
+}
+
+.extra.content a {
+  overflow: hidden;
+}
+
 
 
 #control-panel {

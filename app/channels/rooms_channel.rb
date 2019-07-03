@@ -19,11 +19,6 @@ class RoomsChannel < ApplicationCable::Channel
   end
 
   def receive(data)
-    puts 'received!!!'
-    puts ''
-    puts ''
-    puts ''
-    puts ''
     @user_session = UserSession.find(data['session_id'])
     RoomsChannel.broadcast_state(@room)
   end
