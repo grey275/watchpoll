@@ -9,7 +9,7 @@ class VideoPlayer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      player: null,
+      player_opts: null,
     }
   }
 
@@ -23,7 +23,7 @@ class VideoPlayer extends React.Component {
         playerVars: {
           autoplay: 0,
           controls: 0,
-          start: 0,
+          start: current_video_time,
         }
       }
     });
@@ -41,15 +41,17 @@ class VideoPlayer extends React.Component {
   }
 
   render() {
-    const { player_opts } = this.state;
+    const { player_opts,  } = this.state;
     return (
-      <React.Fragment>
-        <YouTube
+      player_opts
+      ? <YouTube
           className="video-player"
           videoId={this.props.video_uid}
           opts={player_opts}
         />
-      </React.Fragment>
+      : <Placeholder className="video-player" fluid>
+          <Placeholder.Image />
+        </Placeholder>
 
     )
   }

@@ -1,7 +1,15 @@
 import React from 'react';
-import { Statistic } from 'semantic-ui-react';
+import { Statistic, Button } from 'semantic-ui-react';
 
-const Stats = ({num_of_users, next_video_time}) => (
+
+const timeFromString = (str) => (new Date(str).getTime());
+
+const getSecondsTillNextVideo = (next_video_time) => (
+    Math.round((new Date().getTime() - timeFromString(next_video_time)) / 1000)
+)
+
+
+const Stats = ({num_of_users, seconds_till_next_video}) => (
   <Statistic.Group size="mini" className="stats">
     <Statistic>
       <Statistic.Value>
@@ -13,7 +21,7 @@ const Stats = ({num_of_users, next_video_time}) => (
     </Statistic>
     <Statistic>
       <Statistic.Value>
-        {next_video_time}<small>s</small>
+        {seconds_till_next_video || 0}<small>s</small>
       </Statistic.Value>
       <Statistic.Label>
         Next Video
@@ -22,20 +30,25 @@ const Stats = ({num_of_users, next_video_time}) => (
   </Statistic.Group>
 )
 
-const ControlPanel = ({next_video_time, num_of_users}) => {
-  const stats = {
-    num_of_users,
-    next_video_time,
-  }
-  return (
-    <section
-      id='control-panel'
-    >
-      {
+
+class ControlPanel extends React.Component {
+
+  render () {
+    const {next_video_time, num_of_users} = this.props;
+    const stats = {
+      num_of_users,
+      seconds_till_next_video: getSecondsTillNextVideo(next_video_time),
+    }
+
+    return (
+      <section
+        id='control-panel'
+      >
         <Stats {...stats} />
-      }
-    </section>
-  )
+        <Button>Live</Button>
+      </section>
+    )
+  }
 }
 
 export default ControlPanel
