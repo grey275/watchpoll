@@ -12,7 +12,7 @@ $background: #f3f3f3;
     "control-panel control-panel"
     "video poll";
   grid-gap: .5em;
-  @media screen and (max-width: 1400px) {
+  @media screen and (max-width: 1000px) {
     grid-template-columns: auto;
     grid-template-areas:
       "control-panel"
