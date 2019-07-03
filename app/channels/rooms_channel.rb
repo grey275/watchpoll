@@ -28,5 +28,6 @@ class RoomsChannel < ApplicationCable::Channel
     puts 'unsubscribed!'
     @user_session.update(end: Time.now)
     @user_session.reload
+    RoomsChannel.broadcast_state(@room)
   end
 end
