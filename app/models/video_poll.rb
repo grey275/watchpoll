@@ -51,20 +51,6 @@ class VideoPoll < ApplicationRecord
     reload
     VideoPoll.find(id).played_video
   end
-
-  def tallyPreferencesForVideo candidate_video, preferences
-    preferences.select do |preference|
-      includes = active_session_preferences.any? preference
-      puts 'includes' + includes.to_s
-      includes
-    end
-    .sum do |preference|
-      puts 'preference'
-      ap preference
-      orda_count_formula(candidate_videos.length, preference.position)
-    end
-  end
-
   def active_session_preferences
     room.reload
     room.active_user_sessions
@@ -85,14 +71,11 @@ class VideoPoll < ApplicationRecord
     puts "standings for poll: #{id}"
     candidate_videos.each { |cv| ap cv.video }
     candidate_videos.map do |c_video|
-      points = tallyPreferencesForVideo c_video, c_video.preferences
+      points = c_video.tallyPreferences
       video = c_video.video
       {video_id: video.id, candidate_video_id: c_video.id, video_uid: video.video_uid, points: points, title: video.title}
     end
   end
 
   private
-  def orda_count_formula(length, position)
-    length - position
-  end
 end
