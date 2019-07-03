@@ -15,7 +15,6 @@ class RoomContainer extends React.Component {
     this.state = {
       standings: [],
       current_video_state: null,
-      video_end_time: null,
       poll_video_snippets: [],
       preference_order_mapping: [],
       session_id: null,
@@ -41,6 +40,7 @@ class RoomContainer extends React.Component {
     const to_set = {
       standings,
       num_of_users,
+      next_video_time: current_video_state.end_time,
     };
 
     if ((poll_id && poll_id !== this.state.poll_id) || (this.state.snippets && this.state.snippets.length === 0)) {
@@ -118,15 +118,13 @@ class RoomContainer extends React.Component {
       poll_id,
       current_video_state,
       num_of_users,
+      next_video_time,
     } = this.state;
     const standings_with_snippets = standings.length > 0 && snippets.length > 0
       ? this.getStandingsWithSnippets(standings, snippets)
       : [];
 
-    const next_video_time =
-      current_video_state
-      && current_video_state.video_end_time;
-
+    console.log('next', next_video_time);
     return (
       <section id="room">
         <VideoPlayer
