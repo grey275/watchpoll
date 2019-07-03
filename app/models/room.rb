@@ -20,7 +20,10 @@ class Room < ApplicationRecord
     else
     end
     puts "count before" + video_polls.count.to_s
-    self.generate_video_poll
+    new_poll = self.generate_video_poll
+    if new_poll.candidate_videos.length == 0
+      throw 'generated empty poll!'
+    end
     puts "count after" + video_polls.count.to_s
 
     RoomsChannel.broadcast_state self
@@ -87,10 +90,14 @@ class Room < ApplicationRecord
 
   def current_video
     last_poll = Room.find(id).video_polls.second_to_last
-    if ( (last_poll) &&
-      (last_poll.played_video))
-      puts "USINT LAST POLL TO GET VIDEO"
-      last_poll.played_video
+    if last_poll
+      if last_poll.played_video
+        puts "LAST POLL PLAYED VIDEO"
+        last_poll.played_video
+      else
+        puts 'chosing first video'
+        last_poll.candidate_videos.first
+      end
     else
       puts "CURRENT VIDEO IS FIRST"
       playlist.videos.first
@@ -103,6 +110,11 @@ class Room < ApplicationRecord
 
   def current_video_poll
     Room.find(id).video_polls.last
+  end
+
+  def active_user_sessions
+    user_sessions.reload
+    user_sessions.where(end: nil)
   end
 
   def state
@@ -128,7 +140,7 @@ class Room < ApplicationRecord
   def run
     Thread.new do
       # while true
-      100.times do
+      while true
         cycle_video
         sleep runtime
       end

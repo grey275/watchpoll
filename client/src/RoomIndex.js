@@ -2,7 +2,7 @@ import React from 'react'
 import Axios from 'axios'
 import _ from 'lodash';
 import { Link, Switch, Route, } from 'react-router-dom';
-import { Placeholder } from 'semantic-ui-react';
+import { Placeholder, Container } from 'semantic-ui-react';
 
 
 import { API_ROUTE, DOMAIN_NAME } from './constants';
@@ -69,9 +69,9 @@ class RoomIndex extends React.Component {
       : <Placeholder />
 
     return(
-      <section id="room-cards">
+      <Container fluid id="room-cards">
         {cards}
-      </section>
+      </Container>
     )
   }
 
