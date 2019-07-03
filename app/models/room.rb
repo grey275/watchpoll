@@ -96,7 +96,7 @@ class Room < ApplicationRecord
         last_poll.played_video
       else
         puts 'chosing first video'
-        last_poll.candidate_videos.first
+        last_poll.candidate_videos.first.video
       end
     else
       puts "CURRENT VIDEO IS FIRST"

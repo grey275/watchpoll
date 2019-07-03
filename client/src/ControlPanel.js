@@ -41,11 +41,6 @@ const Stats = ({num_of_users, next_video_time}) => (
         Viewers
       </Statistic.Label>
     </Statistic>
-    <CountDown
-      date={new Date(next_video_time).getTime()}
-      renderer={CountdownRenderer}
-      // onComplete={onNextVideo}
-    />
   </Statistic.Group>
 )
 
