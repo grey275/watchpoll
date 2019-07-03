@@ -30,15 +30,15 @@ class VideoPlayer extends React.Component {
   initPlayerOpts = () => {
     const { start_time, runtime, video_uid} = this.props;
     const current_time = new Date().getTime()
-    const current_video_time = (current_time - timeFromString(start_time)) / 1000;
-    console.log('current time: ', current_video_time);
+    const current_video_seconds = (current_time - timeFromString(start_time)) / 1000;
+    console.log('current time: ', current_video_seconds);
 
     this.setState({
       player_opts: {
         playerVars: {
           autoplay: 1,
           controls: 1,
-          start: current_video_time,
+          start: current_video_seconds,
         }
       }
     });
@@ -57,7 +57,7 @@ class VideoPlayer extends React.Component {
 
   render() {
     const { player_opts } = this.state;
-    const { onPlay, video_uid } = this.props
+    const { onPlay, video_uid } = this.props;
     return (
       player_opts
       ? <YouTube
