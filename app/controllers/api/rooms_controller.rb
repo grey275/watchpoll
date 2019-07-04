@@ -44,6 +44,10 @@ class Api::RoomsController < ApplicationController
     Room.find(params[:room_id]).run
   end
 
+  def run_all
+    Room.all.each {|room| room.run}
+  end
+
   def cycle
     room = Room.find(params[:room_id])
     room.cycle_video

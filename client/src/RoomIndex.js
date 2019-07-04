@@ -2,7 +2,7 @@ import React from 'react'
 import Axios from 'axios'
 import _ from 'lodash';
 import { Link, Switch, Route, } from 'react-router-dom';
-import { Placeholder, Container } from 'semantic-ui-react';
+import { Placeholder, Container, Grid } from 'semantic-ui-react';
 
 
 import { API_ROUTE, DOMAIN_NAME } from './constants';
@@ -59,6 +59,7 @@ class RoomIndex extends React.Component {
     card_data.map(data => (
       <RoomCard {...data} key={data.room_id} />
     ))
+    .sort((a, b) => (a.room_id - b.room_id))
   )
 
   render(){
@@ -69,9 +70,9 @@ class RoomIndex extends React.Component {
       : <Placeholder />
 
     return(
-      <Container fluid id="room-cards">
+      <Grid fluid textAlign="center" id="room-cards" >
         {cards}
-      </Container>
+      </Grid>
     )
   }
 
