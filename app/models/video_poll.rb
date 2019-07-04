@@ -41,26 +41,26 @@ class VideoPoll < ApplicationRecord
   end
 
   def select_winner
-    room.reload
-    reload
     update(played_video_id:  standings
           .sort_by { |video| -video[:points] }
           .first[:video_id]
     )
-    room.reload
     reload
     VideoPoll.find(id).played_video
   end
+
   def active_session_preferences
-    room.reload
     room.active_user_sessions
       .select do |user_session|
-        puts 'first test'
-        puts user_session.preference_orders.length > 0
-        ap user_session
+        # puts 'first test'
+        # puts user_session.preference_orders.length > 0
+        # ap user_session
+        user_session.preference_orders.reload
         user_session.preference_orders.length > 0
       end
       .map do |user_session|
+        user_session.reload
+        puts 'last preference order' + user_session.preference_orders.last.id.to_s
         user_session.preference_orders.last.preferences
       end
       .flatten
@@ -68,10 +68,11 @@ class VideoPoll < ApplicationRecord
 
   def standings
     candidate_videos.reload
+    reload
     puts "standings for poll: #{id}"
     candidate_videos.each { |cv| ap cv.video }
     candidate_videos.map do |c_video|
-      points = c_video.tallyPreferences
+      points = c_video.tally_preferences
       video = c_video.video
       {video_id: video.id, candidate_video_id: c_video.id, video_uid: video.video_uid, points: points, title: video.title}
     end

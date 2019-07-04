@@ -1,6 +1,6 @@
 import React from 'react';
 import CountDown from 'react-countdown-now';
-import { Statistic, Button } from 'semantic-ui-react';
+import { Statistic, Button, Header } from 'semantic-ui-react';
 
 
 const timeFromString = (str) => (new Date(str).getTime());
@@ -51,11 +51,12 @@ class ControlPanel extends React.Component {
   }
 
   render () {
-    const {next_video_time, num_of_users, onSyncClick} = this.props;
+    const {next_video_time, num_of_users, onSyncClick, room_name } = this.props;
     return (
       <section
         id='control-panel'
       >
+        <Header>{room_name}</Header>
         <Stats
           next_video_time={next_video_time}
           num_of_users={num_of_users}

@@ -72,16 +72,16 @@ class Room < ApplicationRecord
     6.times.each do
       video_index = rand(unchosen_videos.length)
       video = unchosen_videos[video_index]
-      byebug if !video
+      # byebug if !video
       unchosen_videos.delete_at(video_index)
       c_video = CandidateVideo.create(
         video: video,
         video_poll: video_poll,
       )
       c_video.reload
-      if !c_video
-        byebug
-      end
+      # if !c_video
+      #   byebug
+      # end
     end
     video_poll.save
     video_poll.reload
@@ -129,6 +129,7 @@ class Room < ApplicationRecord
         standings: (current_video_poll and current_video_poll.standings),
         num_of_users: current_user_sessions.length,
         poll_id: (current_video_poll and current_video_poll.id),
+        room_name: @name,
       }
   end
 
