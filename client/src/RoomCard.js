@@ -10,7 +10,7 @@ const LinkedCard = ({room_id, card}) => (
 
 const RoomCard = ({playlist_title, thumbnail, room_name, room_id}) => {
   return (
-    <Card  className="room-card" color="blue">
+    <Card  className="room-card">
       <img src={thumbnail.url} alt=""/>
       <Card.Content>
         <Card.Header>{room_name}</Card.Header>
