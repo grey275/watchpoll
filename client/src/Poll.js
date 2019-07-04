@@ -53,7 +53,6 @@ class Poll extends React.Component {
     const order =  preference_order.map(({origin_index}) => (
       standings[origin_index].candidate_video_id
     ));
-    console.log('order: ', order)
     Axios.post(
       `/${API_ROUTE}/rooms/${room_id}/video_polls/${poll_id}/preference_orders`,
       {
@@ -76,8 +75,6 @@ class Poll extends React.Component {
   componentDidUpdate() {
     const { standings_with_snippets, poll_id } = this.props;
     const { current_poll_id } = this.state;
-    console.log('current: ', current_poll_id)
-    console.log('new: ', poll_id);
     if (poll_id !== current_poll_id) {
       const length = standings_with_snippets.length;
       this.setState({preference_order: this.initPreferenceOrder(length), current_poll_id: poll_id})
@@ -96,10 +93,8 @@ class Poll extends React.Component {
   render () {
     const { standings_with_snippets } = this.props;
     let items;
-    console.log('s with s', standings_with_snippets);
     if (standings_with_snippets) {
       const ordered = this.getOrderedCandidateVideos()
-      console.log('ordered: ', ordered)
       items = ordered.map((video_data, index) => (
         <SortableCandidate video_data={video_data} index={index} />
       ));

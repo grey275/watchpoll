@@ -1,6 +1,5 @@
 class Api::RoomsController < ApplicationController
   def create
-    byebug
     playlist = Playlist.create(playlist_uid: params[:playlist_uid])
     room = Room.create(
       playlist: playlist,

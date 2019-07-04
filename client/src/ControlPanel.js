@@ -52,8 +52,6 @@ class ControlPanel extends React.Component {
 
   render () {
     const {next_video_time, num_of_users, onSyncClick} = this.props;
-    console.log('seconds', )
-    console.log(timeFromString(next_video_time))
     return (
       <section
         id='control-panel'

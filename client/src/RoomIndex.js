@@ -28,17 +28,14 @@ class RoomIndex extends React.Component {
       part: 'snippet',
       id: current_video_uids.join(),
     })
-    console.log(response)
     return response.result.items.map(item => item.snippet.thumbnails.medium)
   }
 
   getCardData = async () => {
     const { gapi } = this.props;
     const rooms = await this.getRooms();
-    console.log('rooms: ', rooms)
     const current_video_uids = rooms.map(room => room.current_video_uid);
     const thumbnails = await this.getCurrentVideoThumbnails(current_video_uids);
-    console.log('thumbnails, ', thumbnails)
     return (_.zipWith(
       rooms, thumbnails,
       ({playlist_title, room_id, room_name}, thumbnail) => ({
@@ -48,7 +45,6 @@ class RoomIndex extends React.Component {
   }
 
   componentDidMount(){
-    console.log('mounted')
     this.getCardData()
       .then(card_data => {
         this.setState({card_data})
@@ -64,7 +60,6 @@ class RoomIndex extends React.Component {
 
   render(){
     const { card_data } = this.state;
-    console.log('data at render', card_data);
     const cards = card_data
       ? this.build_cards(card_data)
       : <Placeholder />

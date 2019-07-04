@@ -28,8 +28,6 @@ class RoomContainer extends React.Component {
     const { current_video_state } =  this.state;
     const video_start_time = current_video_state.start_time;
     const current_video_seconds = this.getCurrentVideoTime(video_start_time) / 1000
-    console.log('event: ', event)
-    console.log('playing')
     this.setState({
       onSyncClick: () => {
         event.target.seekTo(current_video_seconds);
@@ -56,10 +54,8 @@ class RoomContainer extends React.Component {
       num_of_users,
       next_video_time: current_video_state.end_time,
     };
-    console.log('current video time', to_set.current_video_time)
 
     if ((poll_id && poll_id !== this.state.poll_id) || (this.state.snippets.length === 0)) {
-      console.log('we gotta set stuff')
       to_set.snippets = await this.getVideoSnippets(standings);
       to_set.poll_id = poll_id;
       to_set.current_video_state = current_video_state

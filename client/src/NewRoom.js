@@ -35,7 +35,6 @@ class NewRoomForm extends React.Component {
 
   onSubmit = async () => {
     const { room_id } = (await this.postRoom()).data;
-    console.log('room id',room_id );
     this.setState({room_id})
   }
 
