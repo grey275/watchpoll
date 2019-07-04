@@ -56,12 +56,14 @@ class ControlPanel extends React.Component {
       <section
         id='control-panel'
       >
-        <Header>{room_name}</Header>
-        <Stats
-          next_video_time={next_video_time}
-          num_of_users={num_of_users}
-        />
-        <Button onClick={onSyncClick} >Sync</Button>
+        <Header as="h2">{room_name}</Header>
+        <span style={{display: 'flex', justifyContent: 'space-between', width:'12em'}}>
+          <Stats
+            next_video_time={next_video_time}
+            num_of_users={num_of_users}
+          />
+          <Button onClick={onSyncClick} >Sync</Button>
+        </span>
       </section>
     )
   }

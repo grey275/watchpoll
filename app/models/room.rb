@@ -131,7 +131,7 @@ class Room < ApplicationRecord
         standings: (current_video_poll and current_video_poll.standings),
         num_of_users: current_user_sessions.length,
         poll_id: (current_video_poll and current_video_poll.id),
-        room_name: @name,
+        room_name: self[:name],
       }
   end
 

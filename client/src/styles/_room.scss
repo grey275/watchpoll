@@ -80,7 +80,17 @@ iframe {
   height: 40px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: .30em;
+  h2.ui.header {
+    margin: 0px;
+  }
+  div.ui.mini.statistics {
+    margin-top: 4px;
+    display: flex;
+    align-content: center;
+    align-items: center;
+  }
 }
 
 #poll {

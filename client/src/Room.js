@@ -20,7 +20,8 @@ class RoomContainer extends React.Component {
       preference_order_mapping: [],
       session_id: null,
       poll_id: null,
-      onSyncClick: null
+      onSyncClick: null,
+      room_name: '',
     };
   }
 
@@ -134,7 +135,8 @@ class RoomContainer extends React.Component {
       current_video_state,
       num_of_users,
       next_video_time,
-      onSyncClick
+      onSyncClick,
+      room_name,
     } = this.state;
     const standings_with_snippets =
       standings.length > 0 && snippets.length > 0
@@ -160,6 +162,7 @@ class RoomContainer extends React.Component {
           num_of_users={num_of_users}
           next_video_time={next_video_time}
           onSyncClick={onSyncClick}
+          room_name={room_name}
         />
       </section>
     );
