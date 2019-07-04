@@ -69,12 +69,13 @@ class RoomContainer extends React.Component {
   }
 
   getSessionId = async () => {
-    const response = await Axios.post(`http://${DOMAIN_NAME}/${API_ROUTE}/rooms/${this.props.room_id}/user_sessions`);
+    const response = await Axios.post(`/${API_ROUTE}/rooms/${this.props.room_id}/user_sessions`);
     return response.data.session_id
   }
 
   subscribeToChannels = async () => {
-    const cable = ActionCable.createConsumer(`http://${DOMAIN_NAME}/${SOCKET_ROUTE}`)
+    const cable = ActionCable.createConsumer(SOCKET_ROUTE)
+    // const cable = ActionCable.createConsumer(`http://localhost:3001/${SOCKET_ROUTE}`)
     global.cable = cable
     const rooms_channel = cable.subscriptions.create({
       channel: 'RoomsChannel',

@@ -25,17 +25,7 @@ playlist4 = Playlist.create(playlist_uid: 'PLuxqHyrCHf5N9P2KT9VCDhP1i9YJgI90c')
 
 # # # --------------------------
 
-room1 = Room.create!(name: 'Room1', playlist: playlist1, runtime: 10)
-room2 = Room.create!(name: 'Room2', playlist: playlist2, runtime: 10)
-room3 = Room.create!(name: 'Room3', playlist: playlist3, runtime: 10)
-room4 = Room.create!(name: 'Room4', playlist: playlist4, runtime: 10)
-
-# # # --------------------------
-
-user1 = User.find_or_create_by! username: 'Peter'
-user2 = User.find_or_create_by! username: 'Jack'
-user3 = User.find_or_create_by! username: 'Bob'
-
-# # # --------------------------
-session1 = UserSession.create!(user: user1, room: room1, start: 1.days.ago, end: 0.days.ago)
-session2 = UserSession.create!(user: user2, room: room2, start: 1.days.ago, end: 0.days.ago)
+room1 = Room.create!(name: 'Room1', playlist: playlist1, runtime: 15)
+room2 = Room.create!(name: 'Room2', playlist: playlist2, runtime: 15)
+room3 = Room.create!(name: 'Room3', playlist: playlist3, runtime: 15)
+room4 = Room.create!(name: 'Room4', playlist: playlist4, runtime: 15)

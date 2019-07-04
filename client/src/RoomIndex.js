@@ -19,7 +19,7 @@ class RoomIndex extends React.Component {
   }
 
   getRooms = async () => (
-    (await Axios.get(`http://${DOMAIN_NAME}/${API_ROUTE}/rooms`)).data
+    (await Axios.get(`/${API_ROUTE}/rooms`)).data
   )
 
   getCurrentVideoThumbnails = async (current_video_uids) => {

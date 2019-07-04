@@ -55,7 +55,7 @@ class Poll extends React.Component {
     ));
     console.log('order: ', order)
     Axios.post(
-      `http://${DOMAIN_NAME}/${API_ROUTE}/rooms/${room_id}/video_polls/${poll_id}/preference_orders`,
+      `/${API_ROUTE}/rooms/${room_id}/video_polls/${poll_id}/preference_orders`,
       {
         session_id,
         poll_id,

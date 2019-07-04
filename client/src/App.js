@@ -13,7 +13,7 @@ import {DOMAIN_NAME, API_ROUTE} from './constants'
 class App extends Component {
 
   getRooms = async () => (
-    (await Axios.get(`http://${DOMAIN_NAME}/${API_ROUTE}/rooms`)).data
+    (await Axios.get(`/${API_ROUTE}/rooms`)).data
   )
 
   render() {

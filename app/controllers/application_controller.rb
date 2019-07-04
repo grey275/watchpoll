@@ -1,2 +1,5 @@
 class ApplicationController < ActionController::API
-end
+  def fallback_index_html
+    render :file => 'client/build'
+  end
+ end
