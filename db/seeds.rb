@@ -23,9 +23,19 @@ playlist2 = Playlist.create(playlist_uid: 'PLtMJF5iI4w_RnTohhNAkQCgb0VNDXdsDV')
 playlist3 = Playlist.create(playlist_uid: 'PL4o29bINVT4EG_y-k5jGoOu3-Am8Nvi10')
 playlist4 = Playlist.create(playlist_uid: 'PLuxqHyrCHf5N9P2KT9VCDhP1i9YJgI90c')
 
+playlist5 = Playlist.create(playlist_uid: 'PLd9auH4JIHvupoMgW5YfOjqtj6Lih0MKw')
+playlist6 = Playlist.create(playlist_uid: 'PL88D33D34A498DFE2')
+playlist7 = Playlist.create(playlist_uid: 'PL3oW2tjiIxvS-4ZDcK0mqxvhxyXaA-qgg')
+playlist8 = Playlist.create(playlist_uid: 'PLXV4Xyd2MSo7emn6KGK_U6trmi5mZPsYw')
+
 # # # --------------------------
 
-room1 = Room.create!(name: 'Room1', playlist: playlist1, runtime: 15)
-room2 = Room.create!(name: 'Room2', playlist: playlist2, runtime: 15)
-room3 = Room.create!(name: 'Room3', playlist: playlist3, runtime: 15)
-room4 = Room.create!(name: 'Room4', playlist: playlist4, runtime: 15)
+room1 = Room.create!(name: 'More Pop Videos', playlist: playlist1, runtime: 15)
+room2 = Room.create!(name: '80 Movie Music for Jack', playlist: playlist2, runtime: 15)
+room3 = Room.create!(name: 'Not more pop music', playlist: playlist3, runtime: 15)
+room4 = Room.create!(name: 'My favourite animated movies', playlist: playlist4, runtime: 15)
+
+room5 = Room.create!(name: 'The Very Best Pop', playlist: playlist5, runtime: 20)
+room6 = Room.create!(name: '3D Animated Shorts', playlist: playlist6, runtime: 15)
+room7 = Room.create!(name: 'Kids 1', playlist: playlist7, runtime: 20)
+room8 = Room.create!(name: '50 Songs you need', playlist: playlist8, runtime: 20)
