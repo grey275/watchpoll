@@ -14,7 +14,7 @@ class Room < ApplicationRecord
 
   def cycle_video
     video_polls.reload
-    'poll id: ' + current_video_poll.id.to_s
+    # 'poll id: ' + current_video_poll.id.to_s
     if video_polls.length >= 1
       current_poll = Room.find(id).video_polls.last
       puts 'WINNER: ' + current_poll.select_winner.title
