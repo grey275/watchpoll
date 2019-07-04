@@ -1,5 +1,6 @@
 class Api::RoomsController < ApplicationController
   def create
+    byebug
     playlist = Playlist.create(playlist_uid: params[:playlist_uid])
     room = Room.create(
       playlist: playlist,
@@ -7,7 +8,13 @@ class Api::RoomsController < ApplicationController
       runtime: params[:runtime]
     )
     room.reload
-    room.run
+    Thread.new do
+      room.run
+    end
+
+    render :json => {
+      room_id: room.id
+    }
   end
 
   def index

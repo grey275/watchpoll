@@ -4,7 +4,7 @@ import Axios from 'axios';
 import Nav from './Nav';
 import RoomIndex  from './RoomIndex';
 import About  from './About';
-import New  from './New';
+import NewRoom  from './NewRoom';
 import Room  from './Room';
 import { Switch, Route, Redirect } from 'react-router-dom'
 
@@ -26,7 +26,7 @@ class App extends Component {
             <Redirect to="/rooms" />
           )} />
           <Route exact path='/about' component={About}/>
-          <Route exact path='/new' component={New}/>
+          <Route exact path='/new' component={NewRoom}/>
           <Route exact path='/rooms' render={() => (
             <RoomIndex gapi={gapi} />
           )}/>
