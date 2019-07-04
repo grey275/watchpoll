@@ -46,6 +46,7 @@ class VideoPoll < ApplicationRecord
           .first[:video_id]
     )
     reload
+    puts 'winner: ' + self[:played_video_id].to_s
     VideoPoll.find(id).played_video
   end
 
