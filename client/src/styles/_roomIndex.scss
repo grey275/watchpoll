@@ -3,3 +3,9 @@
   display: flex;
   flex-wrap: wrap;
 }
+
+.room-card .extra.content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
