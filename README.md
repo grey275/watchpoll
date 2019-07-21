@@ -1,11 +1,9 @@
 # Watchpoll
 
-WebApp which allows people to watch youtube videos together, and and vote on the next video.
+  Watch videos together with a group of people online, and vote on the next video to be played. Final project for Lighthouse Labs.
 
 ## Stack
-Ruby on Rails
-ActionCable
-React
-Semantic-UI
 
-## Screenshots
+React
+Ruby on Rails 5
+PostgreSQL
