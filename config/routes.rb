@@ -13,15 +13,15 @@ Rails.application.routes.draw do
   end
 
 
+  mount ActionCable.server => '/cable'
 
-  get '/' => "pages#home"
 
-  match '*path', to: redirect('/'), via: :all
+  get '/rooms' => 'pages#index'
 
+  match '*path', to: redirect('/rooms'), via: :all
   # get '*path', to: "pages#fallback_index_html", constraints: ->(request) do
   #   !request.xhr? && request.format.html?
   # end
 
-  mount ActionCable.server => '/cable'
 
 end

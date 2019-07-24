@@ -71,7 +71,6 @@ class VideoPoll < ApplicationRecord
     candidate_videos.reload
     reload
     puts "standings for poll: #{id}"
-    candidate_videos.each { |cv| ap cv.video }
     candidate_videos.map do |c_video|
       points = c_video.tally_preferences
       video = c_video.video

@@ -12,6 +12,8 @@ import { GOOGLE_API_KEY } from './constants'
 
 const { gapi } = global;
 
+console.log('hi');
+
 const start = () => {
   gapi.client.init({
     apiKey: GOOGLE_API_KEY,
