@@ -1,5 +1,7 @@
 .git
 .dockerignore
 .byebug_history
+client
+test
 log/*
 tmp/*
