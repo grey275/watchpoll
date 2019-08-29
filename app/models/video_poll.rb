@@ -50,12 +50,10 @@ class VideoPoll < ApplicationRecord
     VideoPoll.find(id).played_video
   end
 
+  # gets polls from only active sessions
   def active_session_preferences
     room.active_user_sessions
       .select do |user_session|
-        # puts 'first test'
-        # puts user_session.preference_orders.length > 0
-        # ap user_session
         user_session.preference_orders.reload
         user_session.preference_orders.length > 0
       end
@@ -67,6 +65,7 @@ class VideoPoll < ApplicationRecord
       .flatten
   end
 
+  # videos with their points tallied
   def standings
     candidate_videos.reload
     reload
@@ -74,9 +73,13 @@ class VideoPoll < ApplicationRecord
     candidate_videos.map do |c_video|
       points = c_video.tally_preferences
       video = c_video.video
-      {video_id: video.id, candidate_video_id: c_video.id, video_uid: video.video_uid, points: points, title: video.title}
+      {
+        video_id: video.id,
+        candidate_video_id: c_video.id,
+        video_uid: video.video_uid,
+        points: points,
+        title: video.title
+      }
     end
   end
-
-  private
 end

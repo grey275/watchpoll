@@ -3,23 +3,18 @@ class CandidateVideo < ApplicationRecord
   has_many :preferences
   belongs_to :video
 
+  ## how many points video has from the poll
   def tally_preferences
     preferences.reload
-    puts 'tallying ' + video.title
     preferences.select do |preference|
-      active = video_poll.active_session_preferences.any? preference
-      puts 'active ' + active.to_s
-      if active
-        # byebug
-      end
-      active
+      video_poll.active_session_preferences.any? preference
     end
     .sum do |preference|
-      puts 'preference'
       orda_count_formula(video_poll.candidate_videos.length, preference.position)
     end
   end
 
+  # formula used to calculate points based on ordering
   def orda_count_formula(length, position)
     length - position
   end

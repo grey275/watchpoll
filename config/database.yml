@@ -19,9 +19,10 @@ development:
   encoding: unicode
   database: rails_project_development
   pool: 5
-  username: postgres
+  username: development
+  password: development
   timeout: 5000
-  host: db
+  host: localhost
 
 production:
   adapter: postgresql
