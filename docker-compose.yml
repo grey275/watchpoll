@@ -2,6 +2,10 @@ version: "3"
 services:
   db:
     image: postgres
+  redis:
+    image: redis
+    ports:
+    - "6379:6379"
   web:
     build: .
     command: bin/rails server --port 3001 --binding 0.0.0.0
