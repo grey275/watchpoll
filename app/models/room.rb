@@ -12,6 +12,7 @@ class Room < ApplicationRecord
     Room.find(id)[:last_playlist_completion_time] || created_at
   end
 
+  # Picks the next video to be played, and broadcasts it.
   def cycle_video
     video_polls.reload
     # 'poll id: ' + current_video_poll.id.to_s
@@ -19,7 +20,6 @@ class Room < ApplicationRecord
       current_poll = Room.find(id).video_polls.last
       puts 'WINNER: ' + current_poll.select_winner.title
       current_poll.played_video.title
-    else
     end
     puts "count before" + video_polls.count.to_s
     new_poll = self.generate_video_poll
@@ -31,17 +31,11 @@ class Room < ApplicationRecord
     RoomsChannel.broadcast_state self
   end
 
-  def print_vps
-    video_polls.each do |vp|
-      puts 'id: ' + vp.id.to_s
-      puts "played: " + vp.played_video_id.to_s
-    end
-  end
-
   def next_video_time
     current_video_poll.end_time
   end
 
+  # videos which have a played_video_id, and haven't been completed since last_playlist_completion_time
   def played_videos
     Room.find(id).video_polls
       .select do |video_poll|
@@ -59,6 +53,7 @@ class Room < ApplicationRecord
     end
   end
 
+  # randomly choses unplayed videos from this room's playlist
   def generate_video_poll
     # randomly pull out 6 videos
     video_poll = VideoPoll.new(
@@ -90,18 +85,16 @@ class Room < ApplicationRecord
     video_poll
   end
 
+  # played video of the last poll, else choose the first video
   def current_video
     last_poll = Room.find(id).video_polls.second_to_last
     if last_poll
       if last_poll.played_video
-        puts "LAST POLL PLAYED VIDEO"
         last_poll.played_video
       else
-        puts 'chosing first video'
         last_poll.candidate_videos.first.video
       end
     else
-      puts "CURRENT VIDEO IS FIRST"
       playlist.videos.first
    end
   end
@@ -119,6 +112,7 @@ class Room < ApplicationRecord
     user_sessions.where(end: nil)
   end
 
+  # everything about the room needed by the client
   def state
       {
         current_video_state: {
@@ -135,11 +129,11 @@ class Room < ApplicationRecord
       }
   end
 
-
   def current_user_sessions
     self.user_sessions.where end: nil
   end
 
+  # hacky solution for cycle timer, would be better to use jobs
   def run
     Thread.new do
       # while true
@@ -149,14 +143,5 @@ class Room < ApplicationRecord
       end
     end
     puts 'running!'
-  end
-
-  def run_test
-    seconds_till_next_video = (next_video_time - Time.now)
-    if seconds_till_next_video >= 0
-      sleep seconds_till_next_video
-    end
-    cycle_video
-    puts 'cycling'
   end
 end
