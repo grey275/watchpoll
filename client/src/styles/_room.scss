@@ -3,7 +3,7 @@ $background: #f3f3f3;
 #room {
   padding: .5em;
   width: 100%;
-  height: calc(100vh - 50px);
+  // height: calc(100vh - 50px);
   display: grid;
   position: relative;
   grid-template-columns: 65%  auto;
@@ -75,10 +75,10 @@ iframe {
 
 #control-panel {
   background-color: white;
-  bottom: 80px;
+  bottom: 0px;
   position: absolute;
   width: 100%;
-  height: 10%;
+  height: 9%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -109,12 +109,7 @@ iframe {
 }
 
 .video-candidate {
-  display:grid;
-  grid-template-areas:
-    "thumbnail title title"
-    "thumbnail description icon-container";
-
-  grid-template-columns: max-content auto auto;
+  display: flex;
   padding: .25em;
   background-color: white;
   margin: .5em;
@@ -125,8 +120,9 @@ iframe {
 }
 
 .video-candidate__name {
-  grid-area: title;
-  align-self: flex-start
+  align-self: flex-start;
+  margin-top: 0px;
+  padding-left: .2em;
 }
 
 .video-candidate__icon-container {
@@ -134,10 +130,11 @@ iframe {
   justify-content: flex-end;
   align-items: flex-end;
   grid-area: icon-container;
+  margin-left: auto;
 }
 
 .thumbnail {
-  grid-area: thumbnail;
+  height: 100%;
 }
 
 .points {
