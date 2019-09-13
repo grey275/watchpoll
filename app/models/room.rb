@@ -1,3 +1,5 @@
+require 'async'
+
 class Room < ApplicationRecord
   has_many :user_sessions
   has_many :video_polls
@@ -114,34 +116,32 @@ class Room < ApplicationRecord
 
   # everything about the room needed by the client
   def state
-      {
-        current_video_state: {
-          start_time: (current_video_poll and current_video_poll.start_time),
-          end_time: (current_video_poll and current_video_poll.end_time),
-          video_uid: current_video_uid,
-          title: current_video.title
-        },
-        pool_playlist_uid: playlist.playlist_uid,
-        standings: (current_video_poll and current_video_poll.standings),
-        num_of_users: current_user_sessions.length,
-        poll_id: (current_video_poll and current_video_poll.id),
-        room_name: self[:name],
-      }
+    {
+      current_video_state: {
+        start_time: (current_video_poll and current_video_poll.start_time),
+        end_time: (current_video_poll and current_video_poll.end_time),
+        video_uid: current_video_uid,
+        title: current_video.title
+      },
+      pool_playlist_uid: playlist.playlist_uid,
+      standings: (current_video_poll and current_video_poll.standings),
+      num_of_users: current_user_sessions.length,
+      poll_id: (current_video_poll and current_video_poll.id),
+      room_name: self[:name],
+    }
   end
 
   def current_user_sessions
     self.user_sessions.where end: nil
   end
 
-  # hacky solution for cycle timer, would be better to use jobs
   def run
-    Thread.new do
-      # while true
+    Async do ||
       while true
+        puts 'cycling'
         cycle_video
         sleep runtime
       end
     end
-    puts 'running!'
   end
 end

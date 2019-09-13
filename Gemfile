@@ -18,7 +18,7 @@ gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
-gem 'delayed_job_active_record'
+gem 'async'
 
 # Google API
 gem 'yt', '~> 0.32.0'
