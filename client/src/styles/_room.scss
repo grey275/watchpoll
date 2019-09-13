@@ -9,7 +9,7 @@ $background: #f3f3f3;
   grid-template-columns: 65%  auto;
   grid-template-rows: min-content;
   grid-template-areas:
-    "control-panel control-panel"
+    "video poll"
     "video poll";
   grid-gap: .5em;
   @media screen and (max-width: 1000px) {
@@ -35,7 +35,7 @@ $background: #f3f3f3;
   grid-area: video;
   position: relative;
   height: 0px;
-  padding-bottom: 56.25%;
+  padding-bottom: calc(9/16 * (100/90) * 100% );
 }
 
 iframe {
@@ -43,7 +43,7 @@ iframe {
   top: 0px;
   left: 0px;
   width: 100%;
-  height: 100%;
+  height: 90%;
 }
 
 
@@ -75,9 +75,10 @@ iframe {
 
 #control-panel {
   background-color: white;
-  grid-area: control-panel;
+  bottom: 80px;
+  position: absolute;
   width: 100%;
-  height: 40px;
+  height: 10%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -105,7 +106,6 @@ iframe {
   overflow-y: scroll;
   margin-block-start: 0px;
   padding-inline-start: 0px;
-  // display: flex;
 }
 
 .video-candidate {
@@ -117,7 +117,6 @@ iframe {
   grid-template-columns: max-content auto auto;
   padding: .25em;
   background-color: white;
-  // border: solid .25em $background;
   margin: .5em;
 }
 
