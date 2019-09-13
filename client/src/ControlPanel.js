@@ -62,7 +62,7 @@ class ControlPanel extends React.Component {
             next_video_time={next_video_time}
             num_of_users={num_of_users}
           />
-          <Button onClick={onSyncClick} >Sync</Button>
+          <Button id="sync-button" onClick={onSyncClick} >Sync</Button>
         </span>
       </section>
     )

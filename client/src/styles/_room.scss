@@ -91,7 +91,12 @@ iframe {
     align-content: center;
     align-items: center;
   }
+
+  #sync-button {
+    align-self: center;
+  }
 }
+
 
 #poll {
   grid-area: poll;
