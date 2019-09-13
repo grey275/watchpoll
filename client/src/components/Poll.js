@@ -5,7 +5,7 @@ import arrayMove from 'array-move';
 
 import Candidate from './Candidate';
 import Axios from 'axios';
-import { DOMAIN_NAME, API_ROUTE } from './constants';
+import { DOMAIN_NAME, API_ROUTE } from '../constants';
 
 
 const SortableItem = SortableElement(({value}) => value);

@@ -5,7 +5,7 @@ import { Link, Switch, Route, } from 'react-router-dom';
 import { Placeholder, Container, Grid } from 'semantic-ui-react';
 
 
-import { API_ROUTE, DOMAIN_NAME } from './constants';
+import { API_ROUTE, DOMAIN_NAME } from '../constants';
 import Room from './Room'
 import RoomCard from './RoomCard';
 

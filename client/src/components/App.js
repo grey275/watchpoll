@@ -8,7 +8,7 @@ import NewRoom  from './NewRoom';
 import Room  from './Room';
 import { Switch, Route, Redirect } from 'react-router-dom'
 
-import {DOMAIN_NAME, API_ROUTE} from './constants'
+import {DOMAIN_NAME, API_ROUTE} from '../constants'
 
 class App extends Component {
 

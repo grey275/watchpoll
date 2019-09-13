@@ -7,7 +7,7 @@ import 'semantic-ui-css/semantic.min.css';
 
 import * as serviceWorker from './serviceWorker'
 
-import App from './App';
+import App from './components/App';
 import { GOOGLE_API_KEY } from './constants'
 
 const { gapi } = global;
