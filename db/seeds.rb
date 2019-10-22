@@ -18,24 +18,23 @@ Room.destroy_all
 Playlist.destroy_all
 
 
-playlist1 = Playlist.create(playlist_uid: 'PLMC9KNkIncKtGvr2kFRuXBVmBev6cAJ2u')
-playlist2 = Playlist.create(playlist_uid: 'PLtMJF5iI4w_RnTohhNAkQCgb0VNDXdsDV')
-playlist3 = Playlist.create(playlist_uid: 'PL4o29bINVT4EG_y-k5jGoOu3-Am8Nvi10')
-playlist4 = Playlist.create(playlist_uid: 'PLuxqHyrCHf5N9P2KT9VCDhP1i9YJgI90c')
+live_overflow = Playlist.create(playlist_uid: 'UUlcE-kVhqyiHCcjYwcpfj9w')
+vulf = Playlist.create(playlist_uid: 'RDEM33jde16RFXNYjr5hwR-UWg')
+casually_explained = Playlist.create(playlist_uid: 'UUr3cBLTYmIK9kY0F_OdFWFQ')
+michael_reeves = Playlist.create(playlist_uid: 'UUtHaxi4GTYDpJgMSGy7AeSw')
 
-playlist5 = Playlist.create(playlist_uid: 'PLd9auH4JIHvupoMgW5YfOjqtj6Lih0MKw')
-playlist6 = Playlist.create(playlist_uid: 'PL88D33D34A498DFE2')
-playlist7 = Playlist.create(playlist_uid: 'PL3oW2tjiIxvS-4ZDcK0mqxvhxyXaA-qgg')
-playlist8 = Playlist.create(playlist_uid: 'PLXV4Xyd2MSo7emn6KGK_U6trmi5mZPsYw')
+# playlist6 = Playlist.create(playlist_uid: 'PL88D33D34A498DFE2')
+# playlist7 = Playlist.create(playlist_uid: 'PL3oW2tjiIxvS-4ZDcK0mqxvhxyXaA-qgg')
+# playlist8 = Playlist.create(playlist_uid: 'PLXV4Xyd2MSo7emn6KGK_U6trmi5mZPsYw')
 
 # # # --------------------------
 
-room1 = Room.create!(name: 'More Pop Videos', playlist: playlist1, runtime: 15)
-room2 = Room.create!(name: '80 Movie Music for Jack', playlist: playlist2, runtime: 15)
-room3 = Room.create!(name: 'Not more pop music', playlist: playlist3, runtime: 15)
-room4 = Room.create!(name: 'My favourite animated movies', playlist: playlist4, runtime: 15)
+room1 = Room.create!(name: 'Live overflow', playlist: live_overflow, runtime: 15)
+room2 = Room.create!(name: 'Vulfpeck', playlist: vulf, runtime: 15)
+room3 = Room.create!(name: 'Casually explained', playlist: casually_explained, runtime: 15)
+room4 = Room.create!(name: 'Michael Reeves', playlist: michael_reeves, runtime: 15)
 
-room5 = Room.create!(name: 'The Very Best Pop', playlist: playlist5, runtime: 20)
-room6 = Room.create!(name: '3D Animated Shorts', playlist: playlist6, runtime: 15)
-room7 = Room.create!(name: 'Kids 1', playlist: playlist7, runtime: 20)
-room8 = Room.create!(name: '50 Songs you need', playlist: playlist8, runtime: 20)
+# room5 = Room.create!(name: 'M', playlist: playlist5, runtime: 20)
+# room6 = Room.create!(name: '3D Animated Shorts', playlist: playlist6, runtime: 15)
+# room7 = Room.create!(name: 'Kids 1', playlist: playlist7, runtime: 20)
+# room8 = Room.create!(name: '50 Songs you need', playlist: playlist8, runtime: 20)
