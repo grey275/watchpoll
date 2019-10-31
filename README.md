@@ -5,7 +5,9 @@ Watch a youtube playlist with others, and vote on the next video to be played de
 ## Screenshots
 
 ![room](https://github.com/petevdp/watchpoll/tree/master/screenshots/room1.png)
+
 ![mobile](https://github.com/petevdp/watchpoll/tree/master/screenshots)
+
 ![room index](https://github.com/petevdp/watchpoll/tree/master/screenshots)
 
 ## Features
