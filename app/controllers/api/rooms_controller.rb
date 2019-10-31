@@ -30,7 +30,8 @@ class Api::RoomsController < ApplicationController
   end
 
   def show
-    room = Room.find(params[:room_id])
+    room_id = params[:id]
+    room = Room.find(room_id)
     render :json => {
       current_video_uid: room.current_video,
       pool_playlist_uid: room.playlist.playlist_uid,
@@ -40,7 +41,9 @@ class Api::RoomsController < ApplicationController
   end
 
   def run
-    Room.find(params[:room_id]).run
+    room = Room.find(params[:room_id])
+    room.run
+    render :json => room.state
   end
 
   def run_all
