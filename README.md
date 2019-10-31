@@ -2,14 +2,6 @@
 
 Watch a youtube playlist with others, and vote on the next video to be played democratically!
 
-## Screenshots
-
-![room](https://github.com/petevdp/watchpoll/tree/master/screenshots/room1.png)
-
-![mobile](https://github.com/petevdp/watchpoll/tree/master/screenshots)
-
-![room index](https://github.com/petevdp/watchpoll/tree/master/screenshots)
-
 ## Features
 
 - Create a room with your chosen title, description, playlist and maximum video runtime
@@ -23,3 +15,11 @@ Watch a youtube playlist with others, and vote on the next video to be played de
 React
 Rails 5
 PostgreSQL
+
+## Screenshots
+
+![room](/screenshots/room1.png)
+
+![mobile](screenshots/room2.png)
+
+![room index](screenshots/room_index.png)
